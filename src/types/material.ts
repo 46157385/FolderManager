@@ -1,0 +1,31 @@
+export interface MaterialItem {
+  id: string
+  name: string
+  pdfUrl: string
+  audioUrl: string
+}
+
+export interface MaterialFolder {
+  id: string
+  name: string
+  materialIds: string[]
+}
+
+export interface MaterialSection {
+  id: string
+  title: string
+  materialIds: string[]
+}
+
+export interface MaterialStats {
+  materialId: string
+  viewCount: number
+  lastViewedAt?: string
+}
+
+export interface ViewHistory {
+  id: string
+  materialId: string
+  materialName: string
+  viewedAt: string
+}
