@@ -6,9 +6,10 @@ import { RouterLink, useRouter } from 'vue-router'
 import SectionedMaterialList from '@/components/materials/SectionedMaterialList.vue'
 import { useAudioPlayer } from '@/composables/useAudioPlayer'
 import { useFavoriteMaterials } from '@/composables/useFavoriteMaterials'
-import { folders } from '@/data/folders'
+import { folders, thinkingFolderId } from '@/data/folders'
 import { materials } from '@/data/materials'
 import { season5Sections } from '@/data/season5Sections'
+import { thinkingSections } from '@/data/thinkingMaterials'
 import type { MaterialItem } from '@/types/material'
 
 interface Props {
@@ -22,6 +23,7 @@ const { currentMaterialId, isPlaying, toggle } = useAudioPlayer()
 const { isFavorite, toggleFavorite } = useFavoriteMaterials()
 
 const folder = computed(() => folders.find((item) => item.id === props.id))
+const folderSections = computed(() => props.id === thinkingFolderId ? thinkingSections : season5Sections)
 const folderMaterials = computed(() => {
   const ids = new Set(folder.value?.materialIds ?? [])
   return materials.filter((material) => ids.has(material.id))
@@ -80,7 +82,7 @@ function clearSearch() {
 
       <SectionedMaterialList
         :materials="folderMaterials"
-        :sections="season5Sections"
+        :sections="folderSections"
         :search-query="searchQuery"
         :current-material-id="currentMaterialId"
         :is-playing="isPlaying"

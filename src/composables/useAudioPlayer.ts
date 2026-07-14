@@ -30,6 +30,10 @@ export function useAudioPlayer() {
   const currentMaterialId = computed(() => currentMaterial.value?.id ?? null)
 
   async function play(material: MaterialItem) {
+    if (!material.audioUrl) {
+      return
+    }
+
     if (currentMaterial.value?.id !== material.id) {
       audio.pause()
       audio.src = material.audioUrl

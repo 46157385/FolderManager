@@ -4,14 +4,20 @@ const defaultMaterialsBaseUrl = 'https://wwg-5.oss-cn-qingdao.aliyuncs.com/mater
 
 export default async function handler(request, response) {
   const materialId = request.query.materialId
+  const collection = request.query.collection || 'session5'
 
-  if (typeof materialId !== 'string' || !/^[a-z0-9-]+$/.test(materialId)) {
+  if (
+    typeof materialId !== 'string'
+    || !/^[a-z0-9-]+$/.test(materialId)
+    || typeof collection !== 'string'
+    || !/^(session5|thinking)$/.test(collection)
+  ) {
     response.status(400).send('Invalid material id')
     return
   }
 
   const baseUrl = process.env.VITE_MATERIALS_BASE_URL?.trim() || defaultMaterialsBaseUrl
-  const pdfUrl = `${baseUrl.replace(/\/+$/, '')}/${encodeURIComponent(materialId)}/document.pdf`
+  const pdfUrl = `${baseUrl.replace(/\/+$/, '')}/${collection}/${encodeURIComponent(materialId)}/document.pdf`
   const upstreamResponse = await fetch(pdfUrl)
 
   if (!upstreamResponse.ok || !upstreamResponse.body) {

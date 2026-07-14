@@ -129,10 +129,6 @@ async function handlePrimaryClick() {
 
 <style scoped>
 .sync-wrap {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 30;
   display: flex;
   max-width: calc(100vw - 32px);
   align-items: center;
@@ -234,8 +230,6 @@ async function handlePrimaryClick() {
 
 @media (max-width: 640px) {
   .sync-wrap {
-    top: 10px;
-    right: 10px;
     max-width: calc(100vw - 20px);
   }
 

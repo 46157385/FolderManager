@@ -59,21 +59,23 @@ ${VITE_MATERIALS_BASE_URL}/<资料 id>/audio.mp3
 
 ```text
 materials/
-  wwg-0101-a329738b/
-    document.pdf
-    audio.mp3
-  wwg-0104-bb742fac/
-    document.pdf
-    audio.mp3
+  session5/
+    wwg-0101-a329738b/
+      document.pdf
+      audio.mp3
+  thinking/
+    wwg-0318-f20ce040/
+      document.pdf
+      audio.mp3
 ```
 
-本地开发时可以不配置 `VITE_MATERIALS_BASE_URL`，应用会回退读取 `public/materials/`。部署到 Vercel 时填入远程资源地址即可，例如：
+本地开发（`npm run dev`）固定读取 `public/materials/`，不会访问远程对象存储，即使配置了 `VITE_MATERIALS_BASE_URL` 也一样。部署到 Vercel 后才会读取 `VITE_MATERIALS_BASE_URL`；未配置时默认使用项目当前的阿里云 OSS 地址：
 
 ```text
-VITE_MATERIALS_BASE_URL=https://pub-xxxx.r2.dev/materials
+VITE_MATERIALS_BASE_URL=https://wwg-5.oss-cn-qingdao.aliyuncs.com/materials
 ```
 
-新增资料时，文件仍按上面的目录结构上传到对象存储，然后在 `src/data/materials.ts` 添加资料 id 和名称即可。
+新增第五季资料时更新 `src/data/materials.ts`；新增“现代思维100讲”资料时更新 `src/data/thinkingMaterials.ts`。文件需按上面的分集目录结构上传到对象存储。
 
 收藏、历史和浏览量默认保存在当前浏览器的 `localStorage`，配置 Supabase 后会自动同步到当前登录账号，供多设备使用。
 

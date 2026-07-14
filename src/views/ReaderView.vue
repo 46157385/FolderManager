@@ -9,7 +9,7 @@ import { useAudioPlayer } from '@/composables/useAudioPlayer'
 import { useFavoriteMaterials } from '@/composables/useFavoriteMaterials'
 import { useMaterialStats } from '@/composables/useMaterialStats'
 import { useViewHistory } from '@/composables/useViewHistory'
-import { defaultFolderId } from '@/data/folders'
+import { defaultFolderId, folders } from '@/data/folders'
 import { materials } from '@/data/materials'
 import { getMaterialTitle } from '@/utils/materialTitle'
 
@@ -21,6 +21,9 @@ const props = defineProps<Props>()
 const router = useRouter()
 const material = computed(() => materials.find((item) => item.id === props.id))
 const materialTitle = computed(() => material.value ? getMaterialTitle(material.value) : '')
+const materialFolderId = computed(() => {
+  return folders.find((folder) => folder.materialIds.includes(props.id))?.id ?? defaultFolderId
+})
 const { currentMaterialId, currentTime, duration, isPlaying, toggle, seek, close } = useAudioPlayer()
 const { isFavorite, toggleFavorite } = useFavoriteMaterials()
 const { viewCount, recordView } = useMaterialStats(props.id)
@@ -41,7 +44,11 @@ async function revealInFinder() {
     return
   }
 
-  const response = await fetch(`/api/reveal-in-finder?materialId=${encodeURIComponent(material.value.id)}`)
+  const query = new URLSearchParams({
+    materialId: material.value.id,
+    collection: material.value.collection ?? 'session5',
+  })
+  const response = await fetch(`/api/reveal-in-finder?${query}`)
 
   if (!response.ok) {
     window.alert('无法在 Finder 中打开文件位置')
@@ -54,7 +61,7 @@ async function revealInFinder() {
     <header class="reader-header">
       <RouterLink
         class="back-link"
-        :to="{ name: 'folder', params: { id: defaultFolderId } }"
+        :to="{ name: 'folder', params: { id: materialFolderId } }"
         title="返回文件夹"
         aria-label="返回文件夹"
       >
@@ -89,6 +96,7 @@ async function revealInFinder() {
     </section>
 
     <FloatingAudioPlayer
+      v-if="material.audioUrl"
       :material="material"
       :active="currentMaterialId === material.id"
       :playing="currentMaterialId === material.id && isPlaying"
@@ -110,7 +118,7 @@ async function revealInFinder() {
 
 .reader-header {
   position: sticky;
-  top: 0;
+  top: var(--app-toolbar-height);
   z-index: 10;
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) auto;
@@ -199,7 +207,7 @@ async function revealInFinder() {
 }
 
 .pdf-wrap {
-  height: calc(100vh - 76px);
+  height: calc(100vh - var(--app-toolbar-height) - 76px);
   padding: 20px;
 }
 
@@ -219,7 +227,7 @@ async function revealInFinder() {
   }
 
   .pdf-wrap {
-    height: calc(100vh - 76px);
+    height: calc(100vh - var(--app-toolbar-height) - 76px);
     padding: 10px;
   }
 

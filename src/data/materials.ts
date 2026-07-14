@@ -1,7 +1,8 @@
 import type { MaterialItem } from "../types/material"
 import { getMaterialAssetUrl } from "../utils/materialAssetUrl"
+import { thinkingMaterials } from './thinkingMaterials'
 
-export const materials: MaterialItem[] = [
+export const season5Materials: MaterialItem[] = [
   {
     "id": "wwg-0101-a329738b",
     "name": "wwg-0101丨问答：怎样客观地看待自己？",
@@ -1905,3 +1906,5 @@ export const materials: MaterialItem[] = [
     "audioUrl": getMaterialAssetUrl("wwg-1231-2ad4873c", "audio.mp3")
   }
 ]
+
+export const materials: MaterialItem[] = [...season5Materials, ...thinkingMaterials]

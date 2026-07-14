@@ -1,8 +1,11 @@
+export type MaterialCollection = 'session5' | 'thinking'
+
 export interface MaterialItem {
   id: string
   name: string
   pdfUrl: string
-  audioUrl: string
+  audioUrl?: string
+  collection?: MaterialCollection
 }
 
 export interface MaterialFolder {

@@ -28,6 +28,7 @@
   --radius-md: 10px;
   --radius-lg: 12px;
   --shell-width: 1040px;
+  --app-toolbar-height: 64px;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -78,6 +79,12 @@ input:focus-visible,
 iframe:focus-visible {
   outline: 3px solid rgba(37, 99, 235, 0.18);
   outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --app-toolbar-height: 56px;
+  }
 }
 
 ::selection {

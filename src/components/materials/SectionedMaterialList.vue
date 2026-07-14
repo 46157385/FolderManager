@@ -131,6 +131,7 @@ function toggleSection(sectionId: string) {
           />
 
           <PlayButton
+            v-if="material.audioUrl"
             :active="props.currentMaterialId === material.id"
             :playing="props.currentMaterialId === material.id && props.isPlaying"
             @toggle="emit('toggleAudio', material)"
