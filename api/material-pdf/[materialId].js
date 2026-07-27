@@ -44,7 +44,14 @@ export default async function handler(request, response) {
     "Content-Disposition",
     `inline; filename="${materialId}.pdf"`,
   );
-  response.setHeader("Cache-Control", "public, max-age=3600");
+  // PDF previews need a response body. Disable conditional browser/CDN caching
+  // so the client never receives a body-less 304 response.
+  response.setHeader(
+    "Cache-Control",
+    "private, no-store, no-cache, must-revalidate",
+  );
+  response.setHeader("Pragma", "no-cache");
+  response.setHeader("Expires", "0");
 
   const contentLength = upstreamResponse.headers.get("content-length");
   if (contentLength) {

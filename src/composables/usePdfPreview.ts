@@ -45,6 +45,7 @@ export function usePdfPreview(source: MaybeRefOrGetter<string | undefined>) {
 
       try {
         const response = await fetch(sourceUrl, {
+          cache: 'no-store',
           signal: controller.signal,
         })
 
