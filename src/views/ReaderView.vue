@@ -12,6 +12,7 @@ import { usePdfPreview } from '@/composables/usePdfPreview'
 import { useViewHistory } from '@/composables/useViewHistory'
 import { defaultFolderId, folders } from '@/data/folders'
 import { materials } from '@/data/materials'
+import { getMaterialPdfFallbackUrl } from '@/utils/materialAssetUrl'
 import { getMaterialTitle } from '@/utils/materialTitle'
 
 interface Props {
@@ -23,6 +24,13 @@ const router = useRouter()
 const material = computed(() => materials.find((item) => item.id === props.id))
 const materialTitle = computed(() => material.value ? getMaterialTitle(material.value) : '')
 const materialPdfUrl = computed(() => material.value?.pdfUrl)
+const materialPdfFallbackUrl = computed(() => {
+  if (!material.value) {
+    return undefined
+  }
+
+  return getMaterialPdfFallbackUrl(material.value.id, material.value.collection ?? 'session5')
+})
 const materialFolderId = computed(() => {
   return folders.find((folder) => folder.materialIds.includes(props.id))?.id ?? defaultFolderId
 })
@@ -33,7 +41,7 @@ const {
   isLoading: isPdfLoading,
   errorMessage: pdfErrorMessage,
   retry: retryPdf,
-} = usePdfPreview(materialPdfUrl)
+} = usePdfPreview(materialPdfUrl, materialPdfFallbackUrl)
 const { viewCount, recordView } = useMaterialStats(props.id)
 const { recordHistory } = useViewHistory()
 

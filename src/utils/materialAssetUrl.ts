@@ -38,15 +38,27 @@ export function getMaterialAssetUrl(
   fileName: 'document.pdf' | 'audio.mp3',
   collection: MaterialCollection = 'session5',
 ) {
-  if (!useLocalMaterials && import.meta.env.PROD && fileName === 'document.pdf') {
-    return `/api/material-pdf/${encodeURIComponent(materialId)}?collection=${collection}`
-  }
-
   const baseUrl = useLocalMaterials
     ? `${localMaterialsBaseUrl}/${collection}`
     : remoteMaterialsBaseUrls[collection]
 
   return `${baseUrl}/${encodeURIComponent(materialId)}/${fileName}`
+}
+
+/**
+ * 直连 OSS 失败时的兜底地址：走 Vercel 代理拉取。
+ * 代理受函数响应体上限（约 4.5MB）和跨境网络影响，仅作备用通道。
+ * 本地开发没有该 Serverless 函数，返回 undefined。
+ */
+export function getMaterialPdfFallbackUrl(
+  materialId: string,
+  collection: MaterialCollection = 'session5',
+) {
+  if (!import.meta.env.PROD) {
+    return undefined
+  }
+
+  return `/api/material-pdf/${encodeURIComponent(materialId)}?collection=${collection}`
 }
 
 function normalizeBaseUrl(baseUrl: string) {
