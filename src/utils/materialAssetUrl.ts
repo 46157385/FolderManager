@@ -2,7 +2,7 @@
  * @Author: ZR21110093-魏兆宇 weizhaoyu@zhongruigroup.com
  * @Date: 2026-07-09 10:36:21
  * @LastEditors: ZR21110093-魏兆宇 weizhaoyu@zhongruigroup.com
- * @LastEditTime: 2026-07-27 14:23:46
+ * @LastEditTime: 2026-07-27 15:38:29
  * @FilePath: /FolderManager/src/utils/materialAssetUrl.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -29,9 +29,9 @@ const remoteMaterialsBaseUrls = Object.fromEntries(
   ]),
 ) as Record<MaterialCollection, string>
 
-// OSS 联调期间临时强制开发环境读取远程文件；测试完成后恢复下一行并删除 false。
-// const useLocalMaterials = import.meta.env.DEV
-const useLocalMaterials = false
+
+// const useLocalMaterials = false 本地也访问远程文件
+const useLocalMaterials = import.meta.env.DEV //本地访问本地文件
 
 export function getMaterialAssetUrl(
   materialId: string,
