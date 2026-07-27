@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, FolderOpen } from '@lucide/vue'
+import { AlertCircle, ArrowLeft, FolderOpen, LoaderCircle, RefreshCw } from '@lucide/vue'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -8,6 +8,7 @@ import FloatingAudioPlayer from '@/components/materials/FloatingAudioPlayer.vue'
 import { useAudioPlayer } from '@/composables/useAudioPlayer'
 import { useFavoriteMaterials } from '@/composables/useFavoriteMaterials'
 import { useMaterialStats } from '@/composables/useMaterialStats'
+import { usePdfPreview } from '@/composables/usePdfPreview'
 import { useViewHistory } from '@/composables/useViewHistory'
 import { defaultFolderId, folders } from '@/data/folders'
 import { materials } from '@/data/materials'
@@ -21,11 +22,18 @@ const props = defineProps<Props>()
 const router = useRouter()
 const material = computed(() => materials.find((item) => item.id === props.id))
 const materialTitle = computed(() => material.value ? getMaterialTitle(material.value) : '')
+const materialPdfUrl = computed(() => material.value?.pdfUrl)
 const materialFolderId = computed(() => {
   return folders.find((folder) => folder.materialIds.includes(props.id))?.id ?? defaultFolderId
 })
 const { currentMaterialId, currentTime, duration, isPlaying, toggle, seek, close } = useAudioPlayer()
 const { isFavorite, toggleFavorite } = useFavoriteMaterials()
+const {
+  previewUrl,
+  isLoading: isPdfLoading,
+  errorMessage: pdfErrorMessage,
+  retry: retryPdf,
+} = usePdfPreview(materialPdfUrl)
 const { viewCount, recordView } = useMaterialStats(props.id)
 const { recordHistory } = useViewHistory()
 
@@ -108,7 +116,26 @@ function isListPath(path: string) {
     </header>
 
     <section class="pdf-wrap">
-      <iframe class="pdf-frame" :src="material.pdfUrl" title="PDF 阅读器" />
+      <div v-if="isPdfLoading" class="pdf-state" aria-live="polite">
+        <LoaderCircle class="pdf-state-spinner" :size="24" />
+        <span>正在加载 PDF...</span>
+      </div>
+
+      <iframe
+        v-else-if="previewUrl"
+        class="pdf-frame"
+        :src="previewUrl"
+        title="PDF 阅读器"
+      />
+
+      <div v-else class="pdf-state pdf-state-error" role="alert">
+        <AlertCircle :size="24" />
+        <span>{{ pdfErrorMessage }}</span>
+        <button class="pdf-retry-button" type="button" @click="retryPdf">
+          <RefreshCw :size="16" />
+          <span>重新加载</span>
+        </button>
+      </div>
     </section>
 
     <FloatingAudioPlayer
@@ -228,6 +255,48 @@ function isListPath(path: string) {
   padding: 20px;
 }
 
+.pdf-state {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-muted-strong);
+  box-shadow: var(--shadow-soft);
+}
+
+.pdf-state-error {
+  flex-direction: column;
+  color: var(--color-danger, #b42318);
+  text-align: center;
+}
+
+.pdf-state-spinner {
+  animation: pdf-spin 0.8s linear infinite;
+}
+
+.pdf-retry-button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  cursor: pointer;
+}
+
+.pdf-retry-button:hover {
+  background: var(--color-bg-elevated);
+}
+
 .pdf-frame {
   width: 100%;
   height: 100%;
@@ -235,6 +304,12 @@ function isListPath(path: string) {
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
+}
+
+@keyframes pdf-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 640px) {
