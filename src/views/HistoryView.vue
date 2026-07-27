@@ -3,12 +3,16 @@ import { ArrowLeft, Clock } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
+import { useScrollPosition } from '@/composables/useScrollPosition'
 import { useViewHistory } from '@/composables/useViewHistory'
 import { materials } from '@/data/materials'
 import { getMaterialTitle } from '@/utils/materialTitle'
 
+defineOptions({ name: 'HistoryView' })
+
 const router = useRouter()
 const { recentHistory } = useViewHistory()
+const { saveScrollPosition } = useScrollPosition()
 
 const historyRows = computed(() => {
   const materialMap = new Map(materials.map((material) => [material.id, material]))
@@ -21,6 +25,11 @@ const historyRows = computed(() => {
     viewedAtLabel: new Date(record.viewedAt).toLocaleString(),
   }))
 })
+
+function openMaterial(materialId: string) {
+  saveScrollPosition()
+  router.push({ name: 'reader', params: { id: materialId } })
+}
 </script>
 
 <template>
@@ -33,8 +42,8 @@ const historyRows = computed(() => {
 
         <div class="title-wrap">
           <p class="eyebrow">History</p>
-          <h1 class="title">最近打开</h1>
-          <p class="description">{{ historyRows.length }} 条最近阅读记录。</p>
+          <h1 class="title">最近一个月</h1>
+          <p class="description">最近一个月共 {{ historyRows.length }} 条阅读记录。</p>
         </div>
       </header>
 
@@ -43,7 +52,7 @@ const historyRows = computed(() => {
           <Clock :size="22" />
         </span>
         <p class="empty-title">暂无历史记录</p>
-        <p class="empty-text">打开资料后，会在这里显示最近访问时间。</p>
+        <p class="empty-text">最近一个月打开的资料会显示在这里。</p>
       </section>
 
       <section v-else class="history-list">
@@ -52,7 +61,7 @@ const historyRows = computed(() => {
           :key="record.id"
           class="history-row"
           type="button"
-          @click="router.push({ name: 'reader', params: { id: record.materialId } })"
+          @click="openMaterial(record.materialId)"
         >
           <span class="record-icon">
             <Clock :size="18" />

@@ -6,13 +6,17 @@ import { RouterLink, useRouter } from 'vue-router'
 import MaterialList from '@/components/materials/MaterialList.vue'
 import { useAudioPlayer } from '@/composables/useAudioPlayer'
 import { useFavoriteMaterials } from '@/composables/useFavoriteMaterials'
+import { useScrollPosition } from '@/composables/useScrollPosition'
 import { materials } from '@/data/materials'
 import type { MaterialItem } from '@/types/material'
+
+defineOptions({ name: 'FavoritesView' })
 
 const router = useRouter()
 const sortDirection = shallowRef<'asc' | 'desc'>('asc')
 const { currentMaterialId, isPlaying, toggle } = useAudioPlayer()
 const { favoriteIds, isFavorite, toggleFavorite } = useFavoriteMaterials()
+const { saveScrollPosition } = useScrollPosition()
 
 const favoriteMaterials = computed(() => {
   const ids = new Set(favoriteIds.value)
@@ -22,6 +26,7 @@ const favoriteMaterials = computed(() => {
 const sortLabel = computed(() => sortDirection.value === 'asc' ? '按名称升序' : '按名称降序')
 
 function openMaterial(material: MaterialItem) {
+  saveScrollPosition()
   router.push({ name: 'reader', params: { id: material.id } })
 }
 

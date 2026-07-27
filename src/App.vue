@@ -1,5 +1,30 @@
 <script setup lang="ts">
+import { watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
 import CloudSyncButton from '@/components/sync/CloudSyncButton.vue'
+import { useCloudAuth } from '@/composables/useCloudAuth'
+
+const cachedViews = ['LibraryView', 'FolderView', 'FavoritesView', 'HistoryView']
+const route = useRoute()
+const router = useRouter()
+const { isPasswordRecovery } = useCloudAuth()
+
+watch(
+  isPasswordRecovery,
+  async (isRecovering) => {
+    if (
+      isRecovering
+      && (route.name !== 'login' || route.query.mode !== 'reset-password')
+    ) {
+      await router.replace({
+        name: 'login',
+        query: { mode: 'reset-password' },
+      })
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
@@ -7,7 +32,11 @@ import CloudSyncButton from '@/components/sync/CloudSyncButton.vue'
     <CloudSyncButton />
   </header>
 
-  <RouterView />
+  <RouterView v-slot="{ Component, route }">
+    <KeepAlive :include="cachedViews" :max="8">
+      <component :is="Component" :key="route.fullPath" />
+    </KeepAlive>
+  </RouterView>
 </template>
 
 <style scoped>

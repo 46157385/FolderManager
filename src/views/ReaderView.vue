@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowLeft, FolderOpen } from '@lucide/vue'
 import { computed, onMounted } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import FavoriteButton from '@/components/materials/FavoriteButton.vue'
 import FloatingAudioPlayer from '@/components/materials/FloatingAudioPlayer.vue'
@@ -54,19 +54,35 @@ async function revealInFinder() {
     window.alert('无法在 Finder 中打开文件位置')
   }
 }
+
+function returnToList() {
+  const previousPath = window.history.state?.back
+
+  if (typeof previousPath === 'string' && isListPath(previousPath)) {
+    router.back()
+    return
+  }
+
+  router.replace({ name: 'folder', params: { id: materialFolderId.value } })
+}
+
+function isListPath(path: string) {
+  return /^\/(?:folders\/[^/?#]+|favorites|history)(?:[/?#]|$)/.test(path)
+}
 </script>
 
 <template>
   <main v-if="material" class="reader-page">
     <header class="reader-header">
-      <RouterLink
+      <button
         class="back-link"
-        :to="{ name: 'folder', params: { id: materialFolderId } }"
-        title="返回文件夹"
-        aria-label="返回文件夹"
+        type="button"
+        title="返回列表"
+        aria-label="返回列表"
+        @click="returnToList"
       >
         <ArrowLeft :size="19" />
-      </RouterLink>
+      </button>
 
       <div class="reader-title-wrap">
         <h1 class="reader-title">{{ materialTitle }}</h1>
@@ -142,6 +158,7 @@ async function revealInFinder() {
   border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-muted-strong);
+  cursor: pointer;
   box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
 }
 

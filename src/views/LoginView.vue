@@ -6,16 +6,16 @@ import {
   Loader2,
   Lock,
   Mail,
-} from '@lucide/vue'
-import { computed, shallowRef, watch } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+} from "@lucide/vue";
+import { computed, shallowRef, watch } from "vue";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
-import { useCloudAuth } from '@/composables/useCloudAuth'
+import { useCloudAuth } from "@/composables/useCloudAuth";
 
-type AuthMode = 'sign-in' | 'sign-up' | 'forgot-password' | 'reset-password'
+type AuthMode = "sign-in" | "sign-up" | "forgot-password" | "reset-password";
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 const {
   authError,
   authMessage,
@@ -28,151 +28,164 @@ const {
   signUpWithPassword,
   updatePassword,
   user,
-} = useCloudAuth()
+} = useCloudAuth();
 
-const mode = shallowRef<AuthMode>(route.query.mode === 'reset-password' ? 'reset-password' : 'sign-in')
-const email = shallowRef('')
-const password = shallowRef('')
-const confirmPassword = shallowRef('')
+const mode = shallowRef<AuthMode>(
+  route.query.mode === "reset-password" ? "reset-password" : "sign-in",
+);
+const email = shallowRef("");
+const password = shallowRef("");
+const confirmPassword = shallowRef("");
 
-const trimmedEmail = computed(() => email.value.trim())
-const signedInEmail = computed(() => user.value?.email ?? '')
-const needsPassword = computed(() => mode.value !== 'forgot-password')
+const trimmedEmail = computed(() => email.value.trim());
+const signedInEmail = computed(() => user.value?.email ?? "");
+const needsPassword = computed(() => mode.value !== "forgot-password");
 const canSubmit = computed(() => {
   if (!isConfigured || isBusy.value || !isReady.value) {
-    return false
+    return false;
   }
 
-  if (mode.value === 'reset-password') {
-    return isValidPassword.value && passwordsMatch.value
+  if (mode.value === "reset-password") {
+    return isValidPassword.value && passwordsMatch.value;
   }
 
   if (!trimmedEmail.value) {
-    return false
+    return false;
   }
 
-  if (mode.value === 'forgot-password') {
-    return true
+  if (mode.value === "forgot-password") {
+    return true;
   }
 
-  return isValidPassword.value && (mode.value === 'sign-in' || passwordsMatch.value)
-})
-const isValidPassword = computed(() => password.value.length >= 6)
-const passwordsMatch = computed(() => password.value === confirmPassword.value)
+  return (
+    isValidPassword.value && (mode.value === "sign-in" || passwordsMatch.value)
+  );
+});
+const isValidPassword = computed(() => password.value.length >= 6);
+const passwordsMatch = computed(() => password.value === confirmPassword.value);
 const title = computed(() => {
-  if (mode.value === 'sign-up') {
-    return '创建账号'
+  if (mode.value === "sign-up") {
+    return "创建账号";
   }
 
-  if (mode.value === 'forgot-password') {
-    return '重置密码'
+  if (mode.value === "forgot-password") {
+    return "重置密码";
   }
 
-  if (mode.value === 'reset-password') {
-    return '设置新密码'
+  if (mode.value === "reset-password") {
+    return "设置新密码";
   }
 
-  return '账号密码登录'
-})
+  return "账号密码登录";
+});
 const description = computed(() => {
-  if (mode.value === 'sign-up') {
-    return '用邮箱注册账号。验证邮箱后，就可以用密码同步收藏和历史记录。'
+  if (mode.value === "sign-up") {
+    return "用邮箱注册账号。验证邮箱后，就可以用密码同步收藏和历史记录。";
   }
 
-  if (mode.value === 'forgot-password') {
-    return '输入绑定邮箱，我们会发送一封重置密码邮件。'
+  if (mode.value === "forgot-password") {
+    return "输入绑定邮箱，我们会发送一封重置密码邮件。";
   }
 
-  if (mode.value === 'reset-password') {
-    return '为当前账号设置一个新密码。'
+  if (mode.value === "reset-password") {
+    return "为当前账号设置一个新密码。";
   }
 
-  return '登录后，收藏列表和历史记录会同步到你的 Supabase 账号。'
-})
+  return "登录后，收藏列表和历史记录会同步到你的 Supabase 账号。";
+});
 const submitLabel = computed(() => {
-  if (mode.value === 'sign-up') {
-    return '注册账号'
+  if (mode.value === "sign-up") {
+    return "注册账号";
   }
 
-  if (mode.value === 'forgot-password') {
-    return '发送重置邮件'
+  if (mode.value === "forgot-password") {
+    return "发送重置邮件";
   }
 
-  if (mode.value === 'reset-password') {
-    return '更新密码'
+  if (mode.value === "reset-password") {
+    return "更新密码";
   }
 
-  return '登录'
-})
+  return "登录";
+});
 
 async function submitAuth() {
   if (!canSubmit.value) {
-    return
+    return;
   }
 
-  if (mode.value === 'sign-up') {
-    const didSignUp = await signUpWithPassword(trimmedEmail.value, password.value, '/login')
+  if (mode.value === "sign-up") {
+    const didSignUp = await signUpWithPassword(
+      trimmedEmail.value,
+      password.value,
+      "/login",
+    );
 
     if (didSignUp) {
-      password.value = ''
-      confirmPassword.value = ''
+      password.value = "";
+      confirmPassword.value = "";
     }
 
-    return
+    return;
   }
 
-  if (mode.value === 'forgot-password') {
-    await sendPasswordReset(trimmedEmail.value)
-    return
+  if (mode.value === "forgot-password") {
+    await sendPasswordReset(trimmedEmail.value);
+    return;
   }
 
-  if (mode.value === 'reset-password') {
-    const didUpdate = await updatePassword(password.value)
+  if (mode.value === "reset-password") {
+    const didUpdate = await updatePassword(password.value);
 
     if (didUpdate) {
-      password.value = ''
-      confirmPassword.value = ''
-      await router.replace({ name: 'library' })
+      password.value = "";
+      confirmPassword.value = "";
+      await router.replace({ name: "library" });
     }
 
-    return
+    return;
   }
 
-  await signInWithPassword(trimmedEmail.value, password.value)
+  await signInWithPassword(trimmedEmail.value, password.value);
 }
 
 function switchMode(nextMode: AuthMode) {
-  mode.value = nextMode
-  password.value = ''
-  confirmPassword.value = ''
+  mode.value = nextMode;
+  password.value = "";
+  confirmPassword.value = "";
 
-  if (nextMode !== 'reset-password' && route.query.mode) {
-    router.replace({ name: 'login' })
+  if (nextMode !== "reset-password" && route.query.mode) {
+    router.replace({ name: "login" });
   }
 }
 
 watch(
   () => route.query.mode,
   (nextMode) => {
-    if (nextMode === 'reset-password') {
-      mode.value = 'reset-password'
+    if (nextMode === "reset-password") {
+      mode.value = "reset-password";
     }
   },
-)
+);
 
 watch(isSignedIn, (signedIn) => {
-  if (signedIn && mode.value !== 'reset-password') {
+  if (signedIn && mode.value !== "reset-password") {
     window.setTimeout(() => {
-      router.push({ name: 'library' })
-    }, 700)
+      router.push({ name: "library" });
+    }, 700);
   }
-})
+});
 </script>
 
 <template>
   <main class="login-page">
     <section class="login-shell">
-      <RouterLink class="back-link" :to="{ name: 'library' }" title="返回列表" aria-label="返回列表">
+      <RouterLink
+        class="back-link"
+        :to="{ name: 'library' }"
+        title="返回列表"
+        aria-label="返回列表"
+      >
         <ArrowLeft :size="19" />
       </RouterLink>
 
@@ -187,9 +200,12 @@ watch(isSignedIn, (signedIn) => {
           <p class="description">{{ description }}</p>
         </div>
 
-        <section v-if="isSignedIn && mode !== 'reset-password'" class="signed-state">
+        <section
+          v-if="isSignedIn && mode !== 'reset-password'"
+          class="signed-state"
+        >
           <CheckCircle2 :size="20" />
-          <span>{{ signedInEmail || '已登录' }}</span>
+          <span>{{ signedInEmail || "已登录" }}</span>
         </section>
 
         <form v-else class="login-form" @submit.prevent="submitAuth">
@@ -204,7 +220,7 @@ watch(isSignedIn, (signedIn) => {
                 autocomplete="email"
                 placeholder="name@example.com"
                 :disabled="isBusy || !isConfigured"
-              >
+              />
             </span>
           </label>
 
@@ -216,14 +232,19 @@ watch(isSignedIn, (signedIn) => {
                 v-model="password"
                 class="input input-with-icon"
                 type="password"
-                :autocomplete="mode === 'sign-in' ? 'current-password' : 'new-password'"
+                :autocomplete="
+                  mode === 'sign-in' ? 'current-password' : 'new-password'
+                "
                 placeholder="至少 6 位"
                 :disabled="isBusy || !isConfigured"
-              >
+              />
             </span>
           </label>
 
-          <label v-if="mode === 'sign-up' || mode === 'reset-password'" class="field">
+          <label
+            v-if="mode === 'sign-up' || mode === 'reset-password'"
+            class="field"
+          >
             <span class="field-label">确认密码</span>
             <span class="input-wrap">
               <Lock class="input-icon" :size="17" />
@@ -234,12 +255,19 @@ watch(isSignedIn, (signedIn) => {
                 autocomplete="new-password"
                 placeholder="再输入一次密码"
                 :disabled="isBusy || !isConfigured"
-              >
+              />
             </span>
           </label>
 
-          <p v-if="needsPassword && password && !isValidPassword" class="hint">密码至少需要 6 位。</p>
-          <p v-else-if="confirmPassword && !passwordsMatch" class="hint hint-error">两次输入的密码不一致。</p>
+          <p v-if="needsPassword && password && !isValidPassword" class="hint">
+            密码至少需要 6 位。
+          </p>
+          <p
+            v-else-if="confirmPassword && !passwordsMatch"
+            class="hint hint-error"
+          >
+            两次输入的密码不一致。
+          </p>
 
           <button class="submit-button" type="submit" :disabled="!canSubmit">
             <Loader2 v-if="isBusy || !isReady" class="spinning" :size="18" />
@@ -274,12 +302,14 @@ watch(isSignedIn, (signedIn) => {
               :disabled="isBusy"
               @click="switchMode(mode === 'sign-up' ? 'sign-in' : 'sign-up')"
             >
-              {{ mode === 'sign-up' ? '已有账号' : '创建账号' }}
+              {{ mode === "sign-up" ? "已有账号" : "创建账号" }}
             </button>
           </div>
         </form>
-
-        <p v-if="!isConfigured" class="status status-error">Supabase 尚未配置</p>
+        <!--  -->
+        <p v-if="!isConfigured" class="status status-error">
+          Supabase 尚未配置
+        </p>
         <p v-else-if="authError" class="status status-error">{{ authError }}</p>
         <p v-else-if="authMessage" class="status">{{ authMessage }}</p>
       </section>

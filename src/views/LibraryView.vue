@@ -3,10 +3,14 @@ import { History, Star } from '@lucide/vue'
 import { useRouter } from 'vue-router'
 
 import FolderList from '@/components/materials/FolderList.vue'
+import { useScrollPosition } from '@/composables/useScrollPosition'
 import { folders } from '@/data/folders'
 import type { MaterialFolder } from '@/types/material'
 
+defineOptions({ name: 'LibraryView' })
+
 const router = useRouter()
+useScrollPosition()
 
 function openFolder(folder: MaterialFolder) {
   router.push({ name: 'folder', params: { id: folder.id } })

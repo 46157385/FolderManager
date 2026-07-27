@@ -6,11 +6,14 @@ import { RouterLink, useRouter } from 'vue-router'
 import SectionedMaterialList from '@/components/materials/SectionedMaterialList.vue'
 import { useAudioPlayer } from '@/composables/useAudioPlayer'
 import { useFavoriteMaterials } from '@/composables/useFavoriteMaterials'
+import { useScrollPosition } from '@/composables/useScrollPosition'
 import { folders, thinkingFolderId } from '@/data/folders'
 import { materials } from '@/data/materials'
 import { season5Sections } from '@/data/season5Sections'
 import { thinkingSections } from '@/data/thinkingMaterials'
 import type { MaterialItem } from '@/types/material'
+
+defineOptions({ name: 'FolderView' })
 
 interface Props {
   id: string
@@ -21,6 +24,7 @@ const router = useRouter()
 const searchQuery = shallowRef('')
 const { currentMaterialId, isPlaying, toggle } = useAudioPlayer()
 const { isFavorite, toggleFavorite } = useFavoriteMaterials()
+const { saveScrollPosition } = useScrollPosition()
 
 const folder = computed(() => folders.find((item) => item.id === props.id))
 const folderSections = computed(() => props.id === thinkingFolderId ? thinkingSections : season5Sections)
@@ -36,6 +40,7 @@ onMounted(() => {
 })
 
 function openMaterial(material: MaterialItem) {
+  saveScrollPosition()
   router.push({ name: 'reader', params: { id: material.id } })
 }
 

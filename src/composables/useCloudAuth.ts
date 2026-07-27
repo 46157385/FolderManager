@@ -8,6 +8,7 @@ const isReady = shallowRef(!isSupabaseConfigured)
 const isBusy = shallowRef(false)
 const authError = shallowRef<string | null>(null)
 const authMessage = shallowRef<string | null>(null)
+const isPasswordRecovery = shallowRef(false)
 let authListenerStarted = false
 
 export function useCloudAuth() {
@@ -165,6 +166,7 @@ export function useCloudAuth() {
       }
 
       authMessage.value = '密码已更新'
+      isPasswordRecovery.value = false
       return true
     }
     catch (error) {
@@ -191,6 +193,8 @@ export function useCloudAuth() {
       if (error) {
         throw error
       }
+
+      isPasswordRecovery.value = false
     }
     catch (error) {
       authError.value = getErrorMessage(error)
@@ -206,6 +210,7 @@ export function useCloudAuth() {
     isBusy: readonly(isBusy),
     authError: readonly(authError),
     authMessage: readonly(authMessage),
+    isPasswordRecovery: readonly(isPasswordRecovery),
     isSignedIn,
     isConfigured: isSupabaseConfigured,
     signIn,
@@ -223,6 +228,7 @@ function startAuthListener() {
   }
 
   authListenerStarted = true
+  isPasswordRecovery.value = isPasswordRecoveryCallbackUrl()
 
   supabaseServices.client.auth.getSession()
     .then(({ data, error }) => {
@@ -240,11 +246,27 @@ function startAuthListener() {
       isBusy.value = false
     })
 
-  supabaseServices.client.auth.onAuthStateChange((_event, session) => {
+  supabaseServices.client.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      isPasswordRecovery.value = true
+      authError.value = null
+      authMessage.value = '身份验证成功，请设置新密码'
+    }
+    else if (event === 'SIGNED_OUT') {
+      isPasswordRecovery.value = false
+    }
+
     user.value = session?.user ?? null
     isReady.value = true
     isBusy.value = false
   })
+}
+
+function isPasswordRecoveryCallbackUrl() {
+  const searchParams = new URLSearchParams(window.location.search)
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''))
+
+  return searchParams.get('type') === 'recovery' || hashParams.get('type') === 'recovery'
 }
 
 function getErrorMessage(error: unknown) {

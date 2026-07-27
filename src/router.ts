@@ -9,6 +9,13 @@ import ReaderView from '@/views/ReaderView.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
+  scrollBehavior(to) {
+    if (to.name === 'reader') {
+      return { top: 0, left: 0 }
+    }
+
+    return false
+  },
   routes: [
     {
       path: '/',
