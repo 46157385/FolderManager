@@ -1,4 +1,5 @@
 import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 
 const defaultMaterialsBaseUrls = {
   session5: "https://wwg-5.oss-cn-qingdao.aliyuncs.com/materials",
@@ -58,5 +59,5 @@ export default async function handler(request, response) {
     response.setHeader("Content-Length", contentLength);
   }
 
-  Readable.fromWeb(upstreamResponse.body).pipe(response);
+  await pipeline(Readable.fromWeb(upstreamResponse.body), response);
 }
