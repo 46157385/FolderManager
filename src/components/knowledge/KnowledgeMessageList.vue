@@ -3,6 +3,7 @@ import { Bot, BookOpenText, LoaderCircle, UserRound } from '@lucide/vue'
 import { nextTick, useTemplateRef, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import KnowledgeMarkdownContent from '@/components/knowledge/KnowledgeMarkdownContent.vue'
 import type { KnowledgeChatMessage } from '@/types/knowledge'
 
 interface Props {
@@ -51,7 +52,11 @@ watch(
 
       <div class="message-body">
         <p class="message-label">{{ message.role === 'user' ? '你' : 'AI 知识助手' }}</p>
-        <p v-if="message.content" class="message-content">{{ message.content }}</p>
+        <KnowledgeMarkdownContent
+          v-if="message.content && message.role === 'assistant'"
+          :content="message.content"
+        />
+        <p v-else-if="message.content" class="message-content">{{ message.content }}</p>
 
         <p v-if="message.streaming" class="streaming-status">
           <LoaderCircle class="loading-icon" :size="15" />
