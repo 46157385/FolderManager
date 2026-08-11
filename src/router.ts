@@ -1,11 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import FavoritesView from '@/views/FavoritesView.vue'
-import FolderView from '@/views/FolderView.vue'
-import HistoryView from '@/views/HistoryView.vue'
 import LibraryView from '@/views/LibraryView.vue'
-import LoginView from '@/views/LoginView.vue'
-import ReaderView from '@/views/ReaderView.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -25,29 +20,34 @@ export const router = createRouter({
     {
       path: '/folders/:id',
       name: 'folder',
-      component: FolderView,
+      component: () => import('@/views/FolderView.vue'),
       props: true,
     },
     {
       path: '/reader/:id',
       name: 'reader',
-      component: ReaderView,
+      component: () => import('@/views/ReaderView.vue'),
       props: true,
     },
     {
       path: '/history',
       name: 'history',
-      component: HistoryView,
+      component: () => import('@/views/HistoryView.vue'),
     },
     {
       path: '/favorites',
       name: 'favorites',
-      component: FavoritesView,
+      component: () => import('@/views/FavoritesView.vue'),
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView,
+      component: () => import('@/views/LoginView.vue'),
+    },
+    {
+      path: '/knowledge/power-seven-rules',
+      name: 'knowledge-power-seven-rules',
+      component: () => import('@/views/KnowledgeBaseView.vue'),
     },
   ],
 })

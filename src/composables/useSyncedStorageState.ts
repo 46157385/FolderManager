@@ -7,19 +7,13 @@ import {
   finishCloudWrite,
   markCloudSynced,
 } from '@/composables/useCloudSyncStatus'
-import { supabaseServices } from '@/services/supabase'
+import { getSyncState, putSyncState } from '@/services/folderManagerApi'
 
 interface UseSyncedStorageStateOptions<T> {
   key: string
   fallback: T
   cloudKey: string
   merge: (localValue: T, remoteValue: T) => T
-}
-
-interface SyncStateRow<T> {
-  user_id: string
-  state_key: string
-  value?: T
 }
 
 export function useSyncedStorageState<T>(options: UseSyncedStorageStateOptions<T>): ShallowRef<T> {
@@ -30,20 +24,31 @@ export function useSyncedStorageState<T>(options: UseSyncedStorageStateOptions<T
   let writeTimer: number | undefined
   let activeUserId: string | null = null
   let activeStorageKey = getStorageKey(options.key, null)
+  let hydratedUserId: string | null = null
+  let loadSeq = 0
+  let isHydrating = false
+  let hasPendingWrite = false
 
   watch(
-    user,
-    async (nextUser) => {
-      activeUserId = nextUser?.id ?? null
-      activeStorageKey = getStorageKey(options.key, activeUserId)
+    () => user.value?.id ?? null,
+    async (userId) => {
+      activeUserId = userId
+      activeStorageKey = getStorageKey(options.key, userId)
       window.clearTimeout(writeTimer)
+      hasPendingWrite = false
       applyValue(readValue(activeStorageKey, options.fallback))
 
-      if (!nextUser || !supabaseServices) {
+      if (!userId) {
+        hydratedUserId = null
         return
       }
 
-      await loadCloudValue(nextUser.id)
+      // 同一用户已完成过云端 hydrate，不再重复 GET
+      if (hydratedUserId === userId) {
+        return
+      }
+
+      await loadCloudValue(userId)
     },
     { immediate: true },
   )
@@ -58,46 +63,39 @@ export function useSyncedStorageState<T>(options: UseSyncedStorageStateOptions<T
         return
       }
 
-      if (!applyingRemoteValue) {
-        scheduleCloudWrite()
+      if (applyingRemoteValue) {
+        return
       }
+
+      // hydrate 期间的本地写入（如打开阅读页记浏览量）先攒着，结束后统一写一次
+      if (isHydrating) {
+        hasPendingWrite = true
+        return
+      }
+
+      scheduleCloudWrite()
     },
     { deep: true },
   )
 
   function scheduleCloudWrite() {
     window.clearTimeout(writeTimer)
-    writeTimer = window.setTimeout(writeCloudValue, 250)
+    writeTimer = window.setTimeout(() => {
+      void writeCloudValue()
+    }, 250)
   }
 
   async function writeCloudValue() {
     const currentUser = user.value
 
-    if (!currentUser || !supabaseServices) {
+    if (!currentUser) {
       return
     }
 
     beginCloudWrite()
 
     try {
-      const { error } = await supabaseServices.client
-        .from('user_sync_state')
-        .upsert(
-          {
-            user_id: currentUser.id,
-            state_key: options.cloudKey,
-            value: state.value,
-            updated_at: new Date().toISOString(),
-          },
-          {
-            onConflict: 'user_id,state_key',
-          },
-        )
-
-      if (error) {
-        throw error
-      }
-
+      await putSyncState(options.cloudKey, state.value)
       finishCloudWrite()
     }
     catch (error) {
@@ -106,41 +104,39 @@ export function useSyncedStorageState<T>(options: UseSyncedStorageStateOptions<T
   }
 
   async function loadCloudValue(userId: string) {
-    if (!supabaseServices) {
-      return
-    }
-
+    const seq = ++loadSeq
+    isHydrating = true
     beginCloudWrite()
 
     try {
-      const { data, error } = await supabaseServices.client
-        .from('user_sync_state')
-        .select('user_id,state_key,value')
-        .eq('user_id', userId)
-        .eq('state_key', options.cloudKey)
-        .maybeSingle<SyncStateRow<T>>()
+      const remoteValue = await getSyncState<T>(options.cloudKey)
 
-      if (error) {
-        throw error
-      }
-
-      if (activeUserId !== userId) {
+      if (seq !== loadSeq || activeUserId !== userId) {
         return
       }
 
-      if (data?.value === undefined) {
+      let shouldWrite = hasPendingWrite
+      hasPendingWrite = false
+
+      if (remoteValue === undefined) {
+        shouldWrite = true
+      }
+      else {
+        const mergedValue = options.merge(state.value, remoteValue)
+
+        if (!isEqual(state.value, mergedValue)) {
+          applyValue(mergedValue)
+        }
+
+        if (!isEqual(remoteValue, mergedValue)) {
+          shouldWrite = true
+        }
+      }
+
+      hydratedUserId = userId
+
+      if (shouldWrite) {
         await writeCloudValue()
-        return
-      }
-
-      const mergedValue = options.merge(state.value, data.value)
-
-      if (!isEqual(state.value, mergedValue)) {
-        applyValue(mergedValue)
-      }
-
-      if (!isEqual(data.value, mergedValue)) {
-        scheduleCloudWrite()
         return
       }
 
@@ -150,6 +146,15 @@ export function useSyncedStorageState<T>(options: UseSyncedStorageStateOptions<T
       failCloudWrite(error)
     }
     finally {
+      if (seq === loadSeq) {
+        isHydrating = false
+
+        if (hasPendingWrite) {
+          hasPendingWrite = false
+          scheduleCloudWrite()
+        }
+      }
+
       finishCloudWrite()
     }
   }

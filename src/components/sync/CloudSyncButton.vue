@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { AlertCircle, Check, Cloud, Loader2, LogIn, LogOut } from '@lucide/vue'
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { AlertCircle, Check, Cloud, Loader2, LogIn, LogOut } from "@lucide/vue";
+import { computed } from "vue";
+import { useRouter } from "vue-router";
 
-import { useCloudAuth } from '@/composables/useCloudAuth'
-import { useCloudSyncStatus } from '@/composables/useCloudSyncStatus'
+import { useCloudAuth } from "@/composables/useCloudAuth";
+import { useCloudSyncStatus } from "@/composables/useCloudSyncStatus";
 
-const router = useRouter()
+const router = useRouter();
 const {
   authError,
   isBusy,
@@ -15,79 +15,81 @@ const {
   isSignedIn,
   signOutCloud,
   user,
-} = useCloudAuth()
-const { syncError, syncState } = useCloudSyncStatus()
+} = useCloudAuth();
+const { syncError, syncState } = useCloudSyncStatus();
 
-const email = computed(() => user.value?.email ?? '')
-const avatarText = computed(() => (email.value.trim().charAt(0) || 'U').toUpperCase())
+const email = computed(() => user.value?.email ?? "");
+const avatarText = computed(() =>
+  (email.value.trim().charAt(0) || "U").toUpperCase(),
+);
 
 const statusLabel = computed(() => {
   if (!isConfigured) {
-    return '未配置'
+    return "未配置";
   }
 
-  if (!isReady.value || isBusy.value || syncState.value === 'syncing') {
-    return '同步中'
+  if (!isReady.value || isBusy.value || syncState.value === "syncing") {
+    return "同步中";
   }
 
   if (authError.value || syncError.value) {
-    return '同步异常'
+    return "同步异常";
   }
 
   if (!isSignedIn.value) {
-    return '登录同步'
+    return "登录同步";
   }
 
-  return email.value || '已登录'
-})
+  return email.value || "已登录";
+});
 
 const buttonTitle = computed(() => {
   if (!isConfigured) {
-    return 'Supabase 未配置'
+    return "Supabase 未配置";
   }
 
   if (authError.value) {
-    return authError.value
+    return authError.value;
   }
 
   if (syncError.value) {
-    return syncError.value
+    return syncError.value;
   }
 
   if (!isSignedIn.value) {
-    return '打开登录页'
+    return "打开登录页";
   }
 
-  return email.value ? `已登录 ${email.value}` : '已登录'
-})
+  return email.value ? `已登录 ${email.value}` : "已登录";
+});
 
 const iconState = computed(() => {
   if (!isConfigured || authError.value || syncError.value) {
-    return 'error'
+    return "error";
   }
 
-  if (!isReady.value || isBusy.value || syncState.value === 'syncing') {
-    return 'busy'
+  if (!isReady.value || isBusy.value || syncState.value === "syncing") {
+    return "busy";
   }
 
-  if (isSignedIn.value && syncState.value === 'synced') {
-    return 'synced'
+  if (isSignedIn.value && syncState.value === "synced") {
+    return "synced";
   }
 
   if (isSignedIn.value) {
-    return 'cloud'
+    return "cloud";
   }
 
-  return 'signin'
-})
+  return "signin";
+});
 
 async function handlePrimaryClick() {
   if (!isConfigured || isBusy.value) {
-    return
+    return;
   }
 
   if (!isSignedIn.value) {
-    await router.push({ name: 'login' })
+    await router.push({ name: "login" });
   }
 }
 </script>
@@ -96,7 +98,10 @@ async function handlePrimaryClick() {
   <div class="sync-wrap">
     <button
       class="sync-pill"
-      :class="{ 'sync-pill-error': iconState === 'error', 'sync-pill-signed': isSignedIn }"
+      :class="{
+        'sync-pill-error': iconState === 'error',
+        'sync-pill-signed': isSignedIn,
+      }"
       type="button"
       :title="buttonTitle"
       :aria-label="buttonTitle"
@@ -104,8 +109,16 @@ async function handlePrimaryClick() {
       @click="handlePrimaryClick"
     >
       <span v-if="isSignedIn" class="sync-avatar">{{ avatarText }}</span>
-      <Loader2 v-else-if="iconState === 'busy'" class="sync-icon spinning" :size="16" />
-      <AlertCircle v-else-if="iconState === 'error'" class="sync-icon" :size="16" />
+      <Loader2
+        v-else-if="iconState === 'busy'"
+        class="sync-icon spinning"
+        :size="16"
+      />
+      <AlertCircle
+        v-else-if="iconState === 'error'"
+        class="sync-icon"
+        :size="16"
+      />
       <Check v-else-if="iconState === 'synced'" class="sync-icon" :size="16" />
       <LogIn v-else-if="iconState === 'signin'" class="sync-icon" :size="16" />
       <Cloud v-else class="sync-icon" :size="16" />
@@ -139,18 +152,18 @@ async function handlePrimaryClick() {
 .sync-logout {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.66);
   color: var(--color-muted-strong);
   cursor: pointer;
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
-  backdrop-filter: blur(16px);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
+  backdrop-filter: blur(20px);
 }
 
 .sync-pill {
   display: inline-flex;
   min-width: 0;
   max-width: min(320px, calc(100vw - 84px));
-  min-height: 40px;
+  min-height: 38px;
   align-items: center;
   gap: 9px;
   padding: 0 12px;
@@ -159,7 +172,7 @@ async function handlePrimaryClick() {
 .sync-pill:hover:not(:disabled),
 .sync-logout:hover:not(:disabled) {
   border-color: var(--color-border-strong);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.94);
   color: var(--color-text-strong);
   transform: translateY(-1px);
 }
@@ -187,7 +200,7 @@ async function handlePrimaryClick() {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(37, 99, 235, 0.22);
+  border: 1px solid rgba(94, 106, 210, 0.22);
   border-radius: 50%;
   background: var(--color-primary-soft);
   color: var(--color-primary-strong);
@@ -211,8 +224,8 @@ async function handlePrimaryClick() {
 
 .sync-logout {
   display: inline-flex;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;

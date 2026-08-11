@@ -3,32 +3,45 @@ import { ArrowLeft, Clock } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
+import LearningStatusBadge from '@/components/learning/LearningStatusBadge.vue'
+import CatalogStatePanel from '@/components/materials/CatalogStatePanel.vue'
+import { useCatalog } from '@/composables/useCatalog'
+import { useLearningStatus } from '@/composables/useLearningStatus'
 import { useScrollPosition } from '@/composables/useScrollPosition'
 import { useViewHistory } from '@/composables/useViewHistory'
-import { materials } from '@/data/materials'
 import { getMaterialTitle } from '@/utils/materialTitle'
 
 defineOptions({ name: 'HistoryView' })
 
 const router = useRouter()
+const { materialById, isLoading, isLoaded, errorMessage, loadCatalog } = useCatalog()
+const { getLearningStatus } = useLearningStatus()
 const { recentHistory } = useViewHistory()
 const { saveScrollPosition } = useScrollPosition()
 
+const catalogLoading = computed(() => {
+  return isLoading.value || (!isLoaded.value && !errorMessage.value)
+})
 const historyRows = computed(() => {
-  const materialMap = new Map(materials.map((material) => [material.id, material]))
+  return recentHistory.value.map((record) => {
+    const material = materialById.value.get(record.materialId)
 
-  return recentHistory.value.map((record) => ({
-    ...record,
-    materialName: materialMap.has(record.materialId)
-      ? getMaterialTitle(materialMap.get(record.materialId)!)
-      : record.materialName,
-    viewedAtLabel: new Date(record.viewedAt).toLocaleString(),
-  }))
+    return {
+      ...record,
+      materialName: material ? getMaterialTitle(material) : record.materialName,
+      viewedAtLabel: new Date(record.viewedAt).toLocaleString(),
+      learningStatus: getLearningStatus(record.materialId),
+    }
+  })
 })
 
 function openMaterial(materialId: string) {
   saveScrollPosition()
   router.push({ name: 'reader', params: { id: materialId } })
+}
+
+function retryCatalog() {
+  void loadCatalog(true)
 }
 </script>
 
@@ -47,7 +60,14 @@ function openMaterial(materialId: string) {
         </div>
       </header>
 
-      <section v-if="historyRows.length === 0" class="empty-state">
+      <CatalogStatePanel
+        v-if="catalogLoading || errorMessage"
+        :loading="catalogLoading"
+        :error-message="errorMessage"
+        @retry="retryCatalog"
+      />
+
+      <section v-else-if="historyRows.length === 0" class="empty-state">
         <span class="empty-icon">
           <Clock :size="22" />
         </span>
@@ -70,6 +90,7 @@ function openMaterial(materialId: string) {
             <span class="record-title">{{ record.materialName }}</span>
             <time class="record-time">{{ record.viewedAtLabel }}</time>
           </span>
+          <LearningStatusBadge :status="record.learningStatus" />
         </button>
       </section>
     </section>
@@ -78,25 +99,30 @@ function openMaterial(materialId: string) {
 
 <style scoped>
 .page {
-  min-height: 100vh;
-  background: var(--color-bg);
+  min-height: calc(100vh - var(--app-toolbar-height));
+  background: transparent;
   color: var(--color-text);
 }
 
 .history-shell {
   width: min(var(--shell-width), calc(100% - 48px));
   margin: 0 auto;
-  padding: 56px 0 96px;
+  padding: 44px 0 96px;
 }
 
 .history-header {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr);
-  gap: 16px;
+  gap: 18px;
   align-items: center;
-  margin-bottom: 28px;
-  padding-bottom: 28px;
-  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 22px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  background: var(--color-surface-glass);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .back-link {
@@ -107,9 +133,9 @@ function openMaterial(materialId: string) {
   justify-content: center;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.74);
   color: var(--color-muted-strong);
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
 }
 
 .back-link:hover {
@@ -124,19 +150,20 @@ function openMaterial(materialId: string) {
 }
 
 .eyebrow {
-  margin: 0 0 10px;
+  margin: 0 0 9px;
   color: var(--color-primary);
-  font-size: 12px;
-  font-weight: 650;
-  letter-spacing: 0;
+  font-size: 11px;
+  font-weight: 720;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
 .title {
   margin: 0;
   color: var(--color-text-strong);
-  font-size: 38px;
-  font-weight: 680;
+  font-size: 36px;
+  font-weight: 720;
+  letter-spacing: -0.035em;
   line-height: 1.1;
 }
 
@@ -158,9 +185,9 @@ function openMaterial(materialId: string) {
   padding: 56px 16px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  background: var(--color-surface-glass);
   text-align: center;
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
+  box-shadow: var(--shadow-panel);
 }
 
 .empty-icon {
@@ -192,24 +219,25 @@ function openMaterial(materialId: string) {
 .history-row {
   display: grid;
   width: 100%;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 44px minmax(0, 1fr) auto;
   gap: 14px;
   align-items: center;
   min-height: 68px;
   padding: 12px 16px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  background: var(--color-surface-glass);
   color: var(--color-text);
   cursor: pointer;
   font: inherit;
   text-align: left;
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(16px);
 }
 
 .history-row:hover {
   border-color: var(--color-border-strong);
-  background: var(--color-bg-elevated);
+  background: rgba(255, 255, 255, 0.96);
   box-shadow: var(--shadow-soft);
   transform: translateY(-1px);
 }
@@ -248,10 +276,27 @@ function openMaterial(materialId: string) {
   font-size: 13px;
 }
 
+@media (max-width: 520px) {
+  .history-row {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .history-row :deep(.status-badge) {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
 @media (max-width: 640px) {
   .history-shell {
     width: min(100% - 24px, var(--shell-width));
-    padding: 32px 0 56px;
+    padding: 24px 0 56px;
+  }
+
+  .history-header {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 14px;
+    padding: 20px;
   }
 
   .title {

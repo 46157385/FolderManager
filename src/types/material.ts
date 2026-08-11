@@ -2,6 +2,7 @@ export type MaterialCollection = 'session5' | 'thinking'
 
 export interface MaterialItem {
   id: string
+  folderId?: string
   name: string
   pdfUrl: string
   audioUrl?: string
@@ -11,7 +12,8 @@ export interface MaterialItem {
 export interface MaterialFolder {
   id: string
   name: string
-  materialIds: string[]
+  materialIds?: string[]
+  materialCount?: number
 }
 
 export interface MaterialSection {

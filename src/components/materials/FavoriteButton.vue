@@ -34,17 +34,17 @@ const emit = defineEmits<{
   justify-content: center;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.74);
   color: var(--color-muted);
   cursor: pointer;
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
 }
 
 .favorite-button:hover {
   border-color: rgba(154, 103, 0, 0.32);
   background: var(--color-warning-soft);
   color: var(--color-warning);
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1.02);
 }
 
 .favorite-button-active {

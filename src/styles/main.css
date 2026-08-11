@@ -1,35 +1,40 @@
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
   color: var(--color-text);
   background: var(--color-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --color-bg: #f7f8fb;
-  --color-bg-elevated: #fbfcfe;
+  --color-bg: #f5f5f7;
+  --color-bg-elevated: #fafafa;
   --color-surface: #ffffff;
-  --color-surface-subtle: #f4f6f9;
-  --color-surface-muted: #eef1f5;
-  --color-text: #111827;
-  --color-text-strong: #0b1220;
-  --color-muted: #667085;
-  --color-muted-strong: #475467;
-  --color-border: #e4e7ec;
-  --color-border-strong: #d0d5dd;
-  --color-primary: #2563eb;
-  --color-primary-strong: #1d4ed8;
-  --color-primary-soft: #eff6ff;
-  --color-warning: #9a6700;
-  --color-warning-soft: #fff7d6;
-  --shadow-soft: 0 1px 2px rgba(16, 24, 40, 0.04), 0 16px 48px rgba(16, 24, 40, 0.06);
-  --shadow-hover: 0 1px 2px rgba(16, 24, 40, 0.05), 0 20px 56px rgba(16, 24, 40, 0.09);
-  --radius-sm: 8px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --shell-width: 1040px;
-  --app-toolbar-height: 64px;
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --color-surface-glass: rgba(255, 255, 255, 0.76);
+  --color-surface-subtle: #f7f7f8;
+  --color-surface-muted: #eeeef1;
+  --color-text: #2c2c31;
+  --color-text-strong: #17171b;
+  --color-muted: #7b7b85;
+  --color-muted-strong: #5b5b66;
+  --color-border: rgba(24, 24, 27, 0.1);
+  --color-border-strong: rgba(24, 24, 27, 0.18);
+  --color-primary: #5e6ad2;
+  --color-primary-strong: #4f58bd;
+  --color-primary-soft: #f0f0ff;
+  --color-warning: #9b6b12;
+  --color-warning-soft: #fff7df;
+  --color-success: #2d7a4b;
+  --color-success-soft: #eaf7ef;
+  --color-danger: #c33d35;
+  --shadow-soft: 0 1px 2px rgba(24, 24, 27, 0.05), 0 12px 36px rgba(24, 24, 27, 0.07);
+  --shadow-hover: 0 2px 4px rgba(24, 24, 27, 0.06), 0 18px 48px rgba(24, 24, 27, 0.11);
+  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 1px 2px rgba(24, 24, 27, 0.04), 0 8px 28px rgba(24, 24, 27, 0.055);
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shell-width: 1080px;
+  --app-toolbar-height: 60px;
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -45,7 +50,15 @@ body,
 
 body {
   min-width: 320px;
-  background: var(--color-bg);
+  background:
+    radial-gradient(circle at 12% -12%, rgba(94, 106, 210, 0.14), transparent 31rem),
+    radial-gradient(circle at 88% 8%, rgba(10, 132, 255, 0.08), transparent 26rem),
+    var(--color-bg);
+  background-attachment: fixed;
+}
+
+#app {
+  isolation: isolate;
 }
 
 button,
@@ -60,6 +73,10 @@ a {
 button,
 input {
   font: inherit;
+}
+
+button {
+  letter-spacing: -0.005em;
 }
 
 button,
@@ -77,7 +94,7 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 iframe:focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.18);
+  outline: 3px solid rgba(94, 106, 210, 0.2);
   outline-offset: 2px;
 }
 
@@ -88,5 +105,16 @@ iframe:focus-visible {
 }
 
 ::selection {
-  background: rgba(37, 99, 235, 0.16);
+  background: rgba(94, 106, 210, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

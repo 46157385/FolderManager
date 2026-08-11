@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "collection": "session5",
+  "sectionId": "season-5-section-01",
+  "title": "一、发刊词（1 讲）",
+  "summary": "文章把学习的最高回报定义为壮大自己的“内核”：知识和经验只有被内化为思维方式，才真正成为人的一部分。强内核不是固执或压倒别人，而是具备三种能力——超越身份标签看见共同规律，依据新的事实与科学理解持续更新观念，并理解不同价值观形成的处境，对暂时跟不上变化的人保持包容和帮助。最终目标，是既能走在时代前面，又能以“了解之同情”带着别人一起前进。",
+  "keyPoints": [
+    "学习不只提供知识的乐趣和现实用途，更重要的是把知识内化为稳定的思维能力。",
+    "弱内核容易被地域、文化和群体身份支配；强内核能够越过标签，识别更普遍的规律。",
+    "强内核会让观念跟随证据和时代变化，不把旧经验当成不可动摇的金科玉律。",
+    "价值观向下兼容不是无原则认同，而是理解差异的成因，进而说服、包容或帮助他人。"
+  ],
+  "root": {
+    "id": "inner-core",
+    "label": "壮大强内核",
+    "detail": "把知识和经验内化为自己的一部分，并形成能面对变化、理解他人的思维能力。",
+    "children": [
+      {
+        "id": "why-learn",
+        "label": "学习为何值得",
+        "detail": "困难世界中的确定回报，最终不是“知道更多”，而是成为更成熟的人。",
+        "children": [
+          {
+            "id": "critical-thinking",
+            "label": "训练批判性思维",
+            "detail": "大学经历未必自动提升思维能力，主动学习才会产生真正的认知增益。",
+            "children": []
+          },
+          {
+            "id": "joy-and-use",
+            "label": "兼顾乐趣与实用",
+            "detail": "既体验知识本身的爽感，也用当前科学理解解决真实问题。",
+            "children": []
+          },
+          {
+            "id": "internalize",
+            "label": "把知识变成自己",
+            "detail": "将知识与经验内化，形成稳定的“内核”，而不是停留在信息收藏。",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "beyond-identity",
+        "label": "超越身份思维",
+        "detail": "不让地域、文化或阵营标签代替判断，向更普遍的规律靠近。",
+        "children": [
+          {
+            "id": "identity-trap",
+            "label": "识别身份陷阱",
+            "detail": "很多争论表面在谈事实，实际是在维护“我是哪里人、属于哪一派”的荣誉。",
+            "children": []
+          },
+          {
+            "id": "context-and-universals",
+            "label": "区分风俗与规律",
+            "detail": "管理方式要尊重地方情境，但现代科学和高水平创造遵循可跨文化交流的共同标准。",
+            "children": []
+          },
+          {
+            "id": "higher-commonality",
+            "label": "高端性相近",
+            "detail": "越接近底层规律和高级思维，不同背景的人越容易无缝理解彼此。",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "update-beliefs",
+        "label": "观念同步更新",
+        "detail": "让判断跟随最新证据和科学理解，把变化视为认知福利。",
+        "children": [
+          {
+            "id": "follow-evidence",
+            "label": "跟随事实修正",
+            "detail": "观点不是身份的一部分；事实变化时，强内核允许自己改变答案。",
+            "children": []
+          },
+          {
+            "id": "welcome-surprise",
+            "label": "欢迎意外突破",
+            "detail": "韦布望远镜等新发现的价值，正是在于迫使既有理论接受检验。",
+            "children": []
+          },
+          {
+            "id": "future-remains-open",
+            "label": "保持未来感",
+            "detail": "看不懂并不可怕；真正危险的是认定新事物与自己无关。",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "downward-compatible",
+        "label": "价值观向下兼容",
+        "detail": "站到更高位置后，仍能理解旧观念和不同处境中的人。",
+        "children": [
+          {
+            "id": "values-have-causes",
+            "label": "理解价值观成因",
+            "detail": "成长环境、风险经验和工作方式，会塑造人们对自由、纪律、依赖与合作的不同偏好。",
+            "children": []
+          },
+          {
+            "id": "help-not-eliminate",
+            "label": "帮助而非淘汰",
+            "detail": "只知道别人错了还不够，强者要能说服、领导，至少能够包容。",
+            "children": []
+          },
+          {
+            "id": "empathetic-understanding",
+            "label": "了解之同情",
+            "detail": "理解对方为何形成那套价值观，在理解基础上推动共同更新。",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "three-examples",
+        "label": "三个收束案例",
+        "detail": "作者用三个人物分别回扣强内核的三种能力。",
+        "children": [
+          {
+            "id": "zhang-sanfeng",
+            "label": "张三丰：越过门派",
+            "detail": "判断正邪看人的心术与行动，而不是所属阵营。",
+            "children": []
+          },
+          {
+            "id": "lee-kuan-yew",
+            "label": "李光耀：依据事实更新",
+            "detail": "即使当场反驳外部批评，之后仍根据问题调整增长方式。",
+            "children": []
+          },
+          {
+            "id": "deng-xiaoping",
+            "label": "邓小平：越过制度二分",
+            "detail": "市场与计划不是身份标签，而是不同制度都可以使用的工具。",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "materialId": "wwg-1019-d121a429",
+      "title": "发刊词：身份之超越，了解之同情"
+    }
+  ],
+  "sourceHash": "sha256:090ae44f09f47c50042badbae81accd6b63764fb55b0f5258dca6f0d9029381b",
+  "generatedAt": "2026-07-28T16:17:59+08:00"
+}

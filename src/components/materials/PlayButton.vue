@@ -39,23 +39,23 @@ const emit = defineEmits<{
   justify-content: center;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.74);
   color: var(--color-text-strong);
   cursor: pointer;
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
 }
 
 .play-button:hover {
-  border-color: rgba(37, 99, 235, 0.32);
+  border-color: rgba(94, 106, 210, 0.32);
   background: var(--color-primary-soft);
   color: var(--color-primary);
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1.02);
 }
 
 .play-button-active {
   border-color: var(--color-primary);
   background: var(--color-primary);
   color: #ffffff;
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 8px 18px rgba(94, 106, 210, 0.2);
 }
 </style>

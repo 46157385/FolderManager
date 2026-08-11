@@ -319,15 +319,15 @@ watch(isSignedIn, (signedIn) => {
 
 <style scoped>
 .login-page {
-  min-height: 100vh;
-  background: var(--color-bg);
+  min-height: calc(100vh - var(--app-toolbar-height));
+  background: transparent;
   color: var(--color-text);
 }
 
 .login-shell {
   width: min(520px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 72px 0;
+  padding: 56px 0 72px;
 }
 
 .back-link {
@@ -339,9 +339,9 @@ watch(isSignedIn, (signedIn) => {
   margin-bottom: 18px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.74);
   color: var(--color-muted-strong);
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
 }
 
 .back-link:hover {
@@ -354,11 +354,15 @@ watch(isSignedIn, (signedIn) => {
 .login-panel {
   display: grid;
   gap: 22px;
-  padding: 28px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-soft);
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.84);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(94, 106, 210, 0.12), transparent 18rem),
+    var(--color-surface-glass);
+  box-shadow: var(--shadow-hover);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .login-icon {
@@ -367,7 +371,7 @@ watch(isSignedIn, (signedIn) => {
   height: 52px;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(37, 99, 235, 0.18);
+  border: 1px solid rgba(94, 106, 210, 0.18);
   border-radius: var(--radius-md);
   background: var(--color-primary-soft);
   color: var(--color-primary);
@@ -380,9 +384,9 @@ watch(isSignedIn, (signedIn) => {
 .eyebrow {
   margin: 0 0 10px;
   color: var(--color-primary);
-  font-size: 12px;
-  font-weight: 650;
-  letter-spacing: 0;
+  font-size: 11px;
+  font-weight: 720;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
@@ -390,7 +394,8 @@ watch(isSignedIn, (signedIn) => {
   margin: 0;
   color: var(--color-text-strong);
   font-size: 34px;
-  font-weight: 680;
+  font-weight: 720;
+  letter-spacing: -0.035em;
   line-height: 1.1;
 }
 
@@ -435,7 +440,7 @@ watch(isSignedIn, (signedIn) => {
   min-height: 44px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.78);
   color: var(--color-text);
   padding: 0 12px;
 }
@@ -446,6 +451,12 @@ watch(isSignedIn, (signedIn) => {
 
 .input:disabled {
   opacity: 0.7;
+}
+
+.input:focus {
+  border-color: rgba(94, 106, 210, 0.46);
+  outline: 0;
+  box-shadow: 0 0 0 4px rgba(94, 106, 210, 0.09);
 }
 
 .hint {
@@ -467,7 +478,7 @@ watch(isSignedIn, (signedIn) => {
   gap: 8px;
   border: 1px solid var(--color-primary);
   border-radius: var(--radius-sm);
-  background: var(--color-primary);
+  background: linear-gradient(180deg, #6873dc, var(--color-primary));
   color: white;
   cursor: pointer;
   font-weight: 650;
@@ -550,7 +561,7 @@ watch(isSignedIn, (signedIn) => {
 @media (max-width: 640px) {
   .login-shell {
     width: min(100% - 24px, 520px);
-    padding: 48px 0;
+    padding: 32px 0 56px;
   }
 
   .login-panel {

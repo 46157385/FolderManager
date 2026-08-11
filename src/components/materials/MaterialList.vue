@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import LearningStatusBadge from '@/components/learning/LearningStatusBadge.vue'
+import type { LearningStatus } from '@/types/learning'
 import type { MaterialItem } from '@/types/material'
 import { getMaterialTitle } from '@/utils/materialTitle'
 import FavoriteButton from './FavoriteButton.vue'
@@ -12,6 +14,7 @@ interface Props {
   isPlaying: boolean
   sortDirection: 'asc' | 'desc'
   isFavorite: (materialId: string) => boolean
+  getLearningStatus: (materialId: string) => LearningStatus
 }
 
 const props = defineProps<Props>()
@@ -41,6 +44,8 @@ const sortedMaterials = computed(() => {
         {{ getMaterialTitle(material) }}
       </button>
 
+      <LearningStatusBadge :status="props.getLearningStatus(material.id)" />
+
       <FavoriteButton
         :active="props.isFavorite(material.id)"
         @toggle="emit('toggleFavorite', material.id)"
@@ -59,20 +64,26 @@ const sortedMaterials = computed(() => {
 <style scoped>
 .material-list {
   display: grid;
-  gap: 12px;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-glass);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .material-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 40px 40px;
+  grid-template-columns: minmax(0, 1fr) auto 40px 40px;
   gap: 12px;
   align-items: center;
-  min-height: 64px;
-  padding: 10px 12px 10px 18px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
+  min-height: 66px;
+  padding: 11px 14px 11px 20px;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  background: transparent;
   transition:
     background-color 160ms var(--ease-standard),
     border-color 160ms var(--ease-standard),
@@ -80,11 +91,12 @@ const sortedMaterials = computed(() => {
     transform 160ms var(--ease-standard);
 }
 
+.material-row:first-child {
+  border-top: 0;
+}
+
 .material-row:hover {
-  border-color: var(--color-border-strong);
-  background: var(--color-bg-elevated);
-  box-shadow: var(--shadow-soft);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .material-name {
@@ -94,7 +106,7 @@ const sortedMaterials = computed(() => {
   color: var(--color-text);
   cursor: pointer;
   font: inherit;
-  font-weight: 560;
+  font-weight: 580;
   line-height: 1.45;
   text-align: left;
   overflow-wrap: anywhere;
@@ -102,5 +114,17 @@ const sortedMaterials = computed(() => {
 
 .material-name:hover {
   color: var(--color-primary);
+}
+
+@media (max-width: 520px) {
+  .material-row {
+    grid-template-columns: minmax(0, 1fr) 38px 38px;
+    row-gap: 8px;
+  }
+
+  .material-row :deep(.status-badge) {
+    grid-column: 1;
+    justify-self: start;
+  }
 }
 </style>

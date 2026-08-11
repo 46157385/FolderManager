@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { ChevronRight, Folder } from '@lucide/vue'
 
-import type { MaterialFolder } from '@/types/material'
+interface FolderListItem {
+  readonly id: string
+  readonly name: string
+  readonly materialIds?: readonly string[]
+  readonly materialCount?: number
+}
 
 interface Props {
-  folders: MaterialFolder[]
+  folders: readonly FolderListItem[]
 }
 
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  open: [folder: MaterialFolder]
+  open: [folder: FolderListItem]
 }>()
 </script>
 
@@ -29,7 +34,9 @@ const emit = defineEmits<{
 
       <span class="folder-main">
         <span class="folder-name">{{ folder.name }}</span>
-        <span class="folder-meta">{{ folder.materialIds.length }} 个资料</span>
+        <span class="folder-meta">
+          {{ folder.materialCount ?? folder.materialIds?.length ?? 0 }} 个资料
+        </span>
       </span>
 
       <span class="folder-arrow" aria-hidden="true">
@@ -48,38 +55,41 @@ const emit = defineEmits<{
 .folder-row {
   display: grid;
   width: 100%;
-  grid-template-columns: 48px minmax(0, 1fr) 28px;
+  grid-template-columns: 52px minmax(0, 1fr) 30px;
   gap: 16px;
   align-items: center;
-  min-height: 76px;
-  padding: 14px 18px;
+  min-height: 92px;
+  padding: 18px 20px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  background: var(--color-surface-glass);
   color: var(--color-text);
   cursor: pointer;
   font: inherit;
   text-align: left;
-  box-shadow: 0 1px 1px rgba(16, 24, 40, 0.03);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .folder-row:hover {
   border-color: var(--color-border-strong);
-  background: var(--color-bg-elevated);
-  box-shadow: var(--shadow-soft);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
 }
 
 .folder-icon {
   display: inline-flex;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(94, 106, 210, 0.18);
   border-radius: var(--radius-md);
-  background: var(--color-surface-subtle);
+  background: linear-gradient(145deg, #f9f9ff, #eaeaff);
   color: var(--color-primary);
+  box-shadow: 0 8px 20px rgba(94, 106, 210, 0.1);
 }
 
 .folder-main {
@@ -93,7 +103,8 @@ const emit = defineEmits<{
 
 .folder-name {
   color: var(--color-text-strong);
-  font-weight: 620;
+  font-size: 15px;
+  font-weight: 660;
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
@@ -116,5 +127,25 @@ const emit = defineEmits<{
 .folder-row:hover .folder-arrow {
   color: var(--color-primary);
   transform: translateX(2px);
+}
+
+@media (min-width: 760px) {
+  .folder-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .folder-row {
+    grid-template-columns: 46px minmax(0, 1fr) 24px;
+    gap: 13px;
+    min-height: 82px;
+    padding: 15px;
+  }
+
+  .folder-icon {
+    width: 46px;
+    height: 46px;
+  }
 }
 </style>

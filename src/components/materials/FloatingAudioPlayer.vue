@@ -138,11 +138,12 @@ function formatTime(seconds: number) {
   align-items: center;
   max-width: calc(100vw - 48px);
   padding: 12px;
-  border: 1px solid rgba(228, 231, 236, 0.92);
-  border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 22px 64px rgba(16, 24, 40, 0.16);
-  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 18px;
+  background: rgba(250, 250, 251, 0.84);
+  box-shadow: 0 24px 64px rgba(24, 24, 27, 0.18), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  backdrop-filter: saturate(150%) blur(24px);
+  -webkit-backdrop-filter: saturate(150%) blur(24px);
 }
 
 .floating-player-collapsed {
@@ -167,7 +168,7 @@ function formatTime(seconds: number) {
   border-color: var(--color-primary);
   background: var(--color-primary);
   color: #ffffff;
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 10px 24px rgba(94, 106, 210, 0.25);
 }
 
 .icon-control {
@@ -260,7 +261,7 @@ function formatTime(seconds: number) {
   border-radius: 50%;
   appearance: none;
   background: var(--color-primary);
-  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.2);
+  box-shadow: 0 2px 8px rgba(24, 24, 27, 0.2);
 }
 
 .progress-slider::-moz-range-track {
@@ -281,7 +282,7 @@ function formatTime(seconds: number) {
   border: 2px solid #ffffff;
   border-radius: 50%;
   background: var(--color-primary);
-  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.2);
+  box-shadow: 0 2px 8px rgba(24, 24, 27, 0.2);
 }
 
 .rotate-icon {

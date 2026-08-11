@@ -132,6 +132,10 @@ function getPdfLoadError(error: unknown) {
     return 'PDF 无法访问，请检查 OSS 公共读权限。'
   }
 
+  if (error instanceof Error && error.message === 'HTTP 502') {
+    return '资料文件服务暂不可用，请检查 OSS 状态或后端配置。'
+  }
+
   if (error instanceof Error && error.message === 'INVALID_PDF') {
     return 'PDF 文件内容不完整或已损坏，请重新加载。'
   }

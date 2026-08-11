@@ -77,7 +77,7 @@ VITE_MATERIALS_BASE_URL=https://wwg-5.oss-cn-qingdao.aliyuncs.com/materials
 
 新增第五季资料时更新 `src/data/materials.ts`；新增“现代思维100讲”资料时更新 `src/data/thinkingMaterials.ts`。文件需按上面的分集目录结构上传到对象存储。
 
-收藏、历史和浏览量默认保存在当前浏览器的 `localStorage`，配置 Supabase 后会自动同步到当前登录账号，供多设备使用。
+收藏、历史、浏览量和学习状态默认保存在当前浏览器的 `localStorage`，配置 Supabase 后会自动同步到当前登录账号，供多设备使用。
 
 ## 免费云同步
 
@@ -92,7 +92,7 @@ VITE_MATERIALS_BASE_URL=https://wwg-5.oss-cn-qingdao.aliyuncs.com/materials
 ```sql
 create table if not exists public.user_sync_state (
   user_id uuid not null references auth.users(id) on delete cascade,
-  state_key text not null check (state_key in ('favorites', 'history', 'stats')),
+  state_key text not null check (state_key in ('favorites', 'history', 'stats', 'learning')),
   value jsonb not null default '[]'::jsonb,
   updated_at timestamptz not null default now(),
   primary key (user_id, state_key)
@@ -103,7 +103,7 @@ drop constraint if exists user_sync_state_state_key_check;
 
 alter table public.user_sync_state
 add constraint user_sync_state_state_key_check
-check (state_key in ('favorites', 'history', 'stats'));
+check (state_key in ('favorites', 'history', 'stats', 'learning'));
 
 alter table public.user_sync_state enable row level security;
 
@@ -136,3 +136,4 @@ with check (auth.uid() is not null and auth.uid() = user_id);
 - `user_sync_state` 表中 `state_key = 'favorites'`
 - `user_sync_state` 表中 `state_key = 'history'`
 - `user_sync_state` 表中 `state_key = 'stats'`
+- `user_sync_state` 表中 `state_key = 'learning'`
