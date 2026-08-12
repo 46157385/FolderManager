@@ -47,7 +47,7 @@ const emit = defineEmits<{
   close: []
 }>()
 
-const activeTab = shallowRef<OutlineTab>('summary')
+const activeTab = shallowRef<OutlineTab>('tree')
 const closeButton = useTemplateRef<HTMLButtonElement>('closeButton')
 const drawerPanel = useTemplateRef<HTMLElement>('drawerPanel')
 const sectionOutline = useSectionOutline()
@@ -83,7 +83,7 @@ watch(
       return
     }
 
-    activeTab.value = 'summary'
+    activeTab.value = 'tree'
     loadCurrentOutline()
   },
   { immediate: true },
@@ -301,19 +301,6 @@ function unlockBodyScroll() {
           <div v-else-if="outline" class="outline-success">
             <nav class="outline-tabs" role="tablist" aria-label="大纲展示方式">
               <button
-                id="outline-summary-tab"
-                class="tab-button"
-                :class="{ 'tab-button--active': activeTab === 'summary' }"
-                type="button"
-                role="tab"
-                aria-controls="outline-summary-panel"
-                :aria-selected="activeTab === 'summary'"
-                @click="activeTab = 'summary'"
-              >
-                <FileText :size="17" aria-hidden="true" />
-                总结
-              </button>
-              <button
                 id="outline-tree-tab"
                 class="tab-button"
                 :class="{ 'tab-button--active': activeTab === 'tree' }"
@@ -338,6 +325,19 @@ function unlockBodyScroll() {
               >
                 <Network :size="17" aria-hidden="true" />
                 思维导图
+              </button>
+              <button
+                id="outline-summary-tab"
+                class="tab-button"
+                :class="{ 'tab-button--active': activeTab === 'summary' }"
+                type="button"
+                role="tab"
+                aria-controls="outline-summary-panel"
+                :aria-selected="activeTab === 'summary'"
+                @click="activeTab = 'summary'"
+              >
+                <FileText :size="17" aria-hidden="true" />
+                总结
               </button>
             </nav>
 
