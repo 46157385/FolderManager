@@ -1,5 +1,8 @@
 import { computed, readonly, shallowRef } from 'vue'
 
+import { isBackendEnabled } from '@/config/features'
+import { folders as staticFolders } from '@/data/folders'
+import { materials as staticMaterials } from '@/data/materials'
 import {
   getAllMaterials,
   getFolders,
@@ -55,6 +58,13 @@ async function loadCatalogData() {
   errorMessage.value = ''
 
   try {
+    if (!isBackendEnabled) {
+      folders.value = staticFolders
+      materials.value = staticMaterials
+      isLoaded.value = true
+      return
+    }
+
     const [folderResponses, materialResponses] = await Promise.all([
       getFolders(),
       getAllMaterials(),

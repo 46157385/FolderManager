@@ -7,6 +7,7 @@ import CatalogStatePanel from '@/components/materials/CatalogStatePanel.vue'
 import FolderList from '@/components/materials/FolderList.vue'
 import { useCatalog } from '@/composables/useCatalog'
 import { useScrollPosition } from '@/composables/useScrollPosition'
+import { isKnowledgeBaseEnabled } from '@/config/features'
 
 defineOptions({ name: 'LibraryView' })
 
@@ -42,6 +43,7 @@ function retryCatalog() {
             {{ folders.length }} 个文件夹
           </span>
           <button
+            v-if="isKnowledgeBaseEnabled"
             class="knowledge-button"
             type="button"
             title="打开权力七规则 AI 问答"

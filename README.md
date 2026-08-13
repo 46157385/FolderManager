@@ -4,7 +4,11 @@
 
 ## 最省事免费部署
 
-推荐用 Vercel 部署前端，Supabase 继续负责登录和云同步。Vercel 会自动提供免费 HTTPS 域名，例如 `https://folder-manager.vercel.app`。
+推荐用 Vercel 部署前端。正式构建默认使用 `src/data` 中的静态目录，并关闭 AI 问答、
+动态总结和 Java 云同步，因此暂时不需要公网 Java 后端。Vercel 会自动提供免费 HTTPS
+域名，例如 `https://folder-manager.vercel.app`。
+
+本地 `pnpm dev` 仍会连接 `http://127.0.0.1:8080`，保留 Ollama、OCR 和知识库调试能力。
 
 1. 把项目推到 GitHub。
 2. 打开 Vercel，选择 `Add New...` -> `Project`。
@@ -17,15 +21,21 @@ Build Command: pnpm build
 Output Directory: dist
 ```
 
-5. 先将 `folderManager_service` 部署为可通过 HTTPS 访问的 Java 服务，然后在 Vercel 的
-   Environment Variables 中配置：
+5. 在 Vercel 的 Environment Variables 中配置静态资源和可选的 Supabase 登录：
 
 ```text
-VITE_API_BASE_URL=/api/v1
-BACKEND_API_BASE_URL=https://你的-Java-后端域名
 VITE_SUPABASE_URL=你的 Supabase Project URL
 VITE_SUPABASE_ANON_KEY=你的 Supabase anon public key
 VITE_MATERIALS_BASE_URL=https://你的资源域名/materials
+```
+
+将来部署好公网 Java 后端后，增加以下变量并重新部署即可恢复后端、AI 问答和 Java 云同步：
+
+```text
+VITE_ENABLE_BACKEND=true
+VITE_ENABLE_AI_KNOWLEDGE=true
+VITE_API_BASE_URL=/api/v1
+BACKEND_API_BASE_URL=https://你的-Java-后端域名
 ```
 
 `BACKEND_API_BASE_URL` 可以填后端 origin（例如 `https://api.example.com`），也可以填完整
@@ -93,7 +103,8 @@ VITE_MATERIALS_BASE_URL=https://wwg-5.oss-cn-qingdao.aliyuncs.com/materials
 
 新增第五季资料时更新 `src/data/materials.ts`；新增“现代思维100讲”资料时更新 `src/data/thinkingMaterials.ts`。文件需按上面的分集目录结构上传到对象存储。
 
-收藏、历史、浏览量和学习状态默认保存在当前浏览器的 `localStorage`，配置 Supabase 后会自动同步到当前登录账号，供多设备使用。
+收藏、历史、浏览量和学习状态默认保存在当前浏览器的 `localStorage`。重新开启 Java 后端后，
+登录账号才会恢复多设备云同步。
 
 ## 免费云同步
 

@@ -7,6 +7,7 @@ import {
   finishCloudWrite,
   markCloudSynced,
 } from '@/composables/useCloudSyncStatus'
+import { isCloudSyncEnabled } from '@/config/features'
 import { getSyncState, putSyncState } from '@/services/folderManagerApi'
 
 interface UseSyncedStorageStateOptions<T> {
@@ -38,7 +39,7 @@ export function useSyncedStorageState<T>(options: UseSyncedStorageStateOptions<T
       hasPendingWrite = false
       applyValue(readValue(activeStorageKey, options.fallback))
 
-      if (!userId) {
+      if (!userId || !isCloudSyncEnabled) {
         hydratedUserId = null
         return
       }
@@ -57,6 +58,10 @@ export function useSyncedStorageState<T>(options: UseSyncedStorageStateOptions<T
     state,
     (value) => {
       writeLocalValue(activeStorageKey, value)
+
+      if (!isCloudSyncEnabled) {
+        return
+      }
 
       if (skipNextCloudWrite) {
         skipNextCloudWrite = false

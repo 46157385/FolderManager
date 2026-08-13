@@ -1,5 +1,6 @@
 import { onScopeDispose, readonly, shallowRef } from 'vue'
 
+import { isBackendEnabled } from '@/config/features'
 import type { MaterialCollection } from '@/types/material'
 import type {
   OutlineNode,
@@ -117,17 +118,19 @@ async function loadSummaryDocument(
 ) {
   let backendError: unknown
 
-  try {
-    const backendSummary = await getMaterialSummary(options.materialId, signal)
-    if (backendSummary !== undefined) {
-      return backendSummary
+  if (isBackendEnabled) {
+    try {
+      const backendSummary = await getMaterialSummary(options.materialId, signal)
+      if (backendSummary !== undefined) {
+        return backendSummary
+      }
     }
-  }
-  catch (error) {
-    if (isAbortError(error)) {
-      throw error
+    catch (error) {
+      if (isAbortError(error)) {
+        throw error
+      }
+      backendError = error
     }
-    backendError = error
   }
 
   const legacySummary = await loadLegacySummary(options, signal)
