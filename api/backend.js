@@ -2,6 +2,7 @@ import { Readable } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 
 const API_PATH_PREFIX = '/api/v1'
+const PROXY_PATH_PARAM = '__proxyPath'
 const REQUEST_HEADERS = [
   'accept',
   'authorization',
@@ -75,13 +76,12 @@ function resolveUpstreamUrl(request) {
 
   const requestUrl = new URL(request.url, `https://${request.headers.host}`)
   const configuredPath = baseUrl.pathname.replace(/\/+$/, '')
-  const requestPath = requestUrl.pathname.startsWith(API_PATH_PREFIX)
-    ? requestUrl.pathname.slice(API_PATH_PREFIX.length)
-    : requestUrl.pathname
+  const requestPath = resolveRequestPath(request)
 
   baseUrl.pathname = configuredPath.endsWith(API_PATH_PREFIX)
     ? `${configuredPath}${requestPath}`
     : `${configuredPath}${API_PATH_PREFIX}${requestPath}`
+  requestUrl.searchParams.delete(PROXY_PATH_PARAM)
   baseUrl.search = requestUrl.search
 
   if (baseUrl.host === request.headers.host) {
@@ -89,6 +89,20 @@ function resolveUpstreamUrl(request) {
   }
 
   return baseUrl
+}
+
+function resolveRequestPath(request) {
+  const configuredPath = request.query?.[PROXY_PATH_PARAM]
+  const path = Array.isArray(configuredPath) ? configuredPath[0] : configuredPath
+
+  if (path === undefined) {
+    return ''
+  }
+  if (typeof path !== 'string') {
+    throw new Error('API 代理路径无效')
+  }
+
+  return `/${path.replace(/^\/+/, '')}`
 }
 
 function createUpstreamRequest(request) {

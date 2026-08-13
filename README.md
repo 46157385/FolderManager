@@ -32,6 +32,12 @@ VITE_MATERIALS_BASE_URL=https://你的资源域名/materials
 API 前缀（例如 `https://api.example.com/api/v1`）。该变量不能指向 Vercel 前端自身，
 否则会形成循环代理。Vercel 会将浏览器的 `/api/v1/**` 请求同域代理到 Java 服务。
 
+Vercel 项目的 **Root Directory** 必须指向同时包含 `package.json`、`vercel.json` 和
+`api/backend.js` 的目录。如果 GitHub 仓库根目录就是本项目，保持默认的 `.`；如果部署
+本地外层 `FolderManager`，则选择 `folderManager_web`。根目录选错时，代理文件不会被
+识别成 Function，`/api/v1/**` 可能被 SPA 回退成 `index.html`，浏览器就会收到
+`text/html` 而不是 JSON。
+
 修改 Vercel 环境变量后必须重新部署；环境变量不会追溯应用到旧的 Deployment。
 
 6. 部署成功后，把 Vercel 给你的正式地址加入 Supabase 控制台：
