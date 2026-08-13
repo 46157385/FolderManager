@@ -5,8 +5,9 @@
 ## 最省事免费部署
 
 推荐用 Vercel 部署前端。正式构建默认使用 `src/data` 中的静态目录，并关闭 AI 问答、
-动态总结和 Java 云同步，因此暂时不需要公网 Java 后端。Vercel 会自动提供免费 HTTPS
-域名，例如 `https://folder-manager.vercel.app`。
+动态总结和 Java 云同步，因此暂时不需要公网 Java 后端。Supabase 登录仍然可用，收藏和
+历史暂时按账号保存在当前浏览器。Vercel 会自动提供免费 HTTPS 域名，例如
+`https://folder-manager.vercel.app`。
 
 本地 `pnpm dev` 仍会连接 `http://127.0.0.1:8080`，保留 Ollama、OCR 和知识库调试能力。
 
@@ -103,8 +104,8 @@ VITE_MATERIALS_BASE_URL=https://wwg-5.oss-cn-qingdao.aliyuncs.com/materials
 
 新增第五季资料时更新 `src/data/materials.ts`；新增“现代思维100讲”资料时更新 `src/data/thinkingMaterials.ts`。文件需按上面的分集目录结构上传到对象存储。
 
-收藏、历史、浏览量和学习状态默认保存在当前浏览器的 `localStorage`。重新开启 Java 后端后，
-登录账号才会恢复多设备云同步。
+收藏、历史、浏览量和学习状态默认保存在当前浏览器的 `localStorage`。用户仍可登录账号，
+但重新开启 Java 后端后才会恢复多设备云同步。
 
 ## 免费云同步
 

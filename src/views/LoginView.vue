@@ -11,6 +11,7 @@ import { computed, shallowRef, watch } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import { useCloudAuth } from "@/composables/useCloudAuth";
+import { isCloudSyncEnabled } from "@/config/features";
 
 type AuthMode = "sign-in" | "sign-up" | "forgot-password" | "reset-password";
 
@@ -80,7 +81,9 @@ const title = computed(() => {
 });
 const description = computed(() => {
   if (mode.value === "sign-up") {
-    return "用邮箱注册账号。验证邮箱后，就可以用密码同步收藏和历史记录。";
+    return isCloudSyncEnabled
+      ? "用邮箱注册账号。验证邮箱后，就可以用密码同步收藏和历史记录。"
+      : "用邮箱注册账号。验证邮箱后，就可以在正式环境登录。";
   }
 
   if (mode.value === "forgot-password") {
@@ -91,7 +94,9 @@ const description = computed(() => {
     return "为当前账号设置一个新密码。";
   }
 
-  return "登录后，收藏列表和历史记录会同步到你的 Supabase 账号。";
+  return isCloudSyncEnabled
+    ? "登录后，收藏列表和历史记录会同步到你的 Supabase 账号。"
+    : "登录功能正常可用；收藏和历史暂时保存在当前浏览器。";
 });
 const submitLabel = computed(() => {
   if (mode.value === "sign-up") {
@@ -195,7 +200,7 @@ watch(isSignedIn, (signedIn) => {
         </span>
 
         <div class="login-copy">
-          <p class="eyebrow">Cloud Sync</p>
+          <p class="eyebrow">{{ isCloudSyncEnabled ? "Cloud Sync" : "Account" }}</p>
           <h1 class="title">{{ title }}</h1>
           <p class="description">{{ description }}</p>
         </div>

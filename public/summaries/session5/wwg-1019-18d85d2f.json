@@ -1,351 +1,156 @@
 {
-  "schemaVersion": 1,
-  "collection": "session5",
-  "sectionId": "season-5-section-02",
-  "materialId": "wwg-1019-18d85d2f",
-  "title": "《内部掌控，外部影响》1：内圣外王的勇气",
-  "summary": "文章把领导力从职位、权术和对外行动，重新定义为“内圣”与“外王”的互动：先在刺激与回应之间守住选择，辨认高于一时冲动和外界期待的真实价值，形成稳定而自主的内核；再用这个内核连接他人、唤起他人最好的一面，共同追求积极目标。芭贝特面对老板羞辱时，以认同、赞赏、换位、重申共同目标和提出行动方案反过来引导老板，说明领导力取决于内核而非地位；父亲把女儿必须在无麻醉下手术的坏消息转述为“今天就能手术”和“医生相信你很勇敢”，说明影响力是让人和局面发生积极改变。文章同时提醒，内圣不是任性做自己，外王也不是支配别人；只顾内在会陷入孤立，只顾外界评价会失去自我。真正成熟的路径，是以内部计分卡确认自己要成为什么人，同时相信并激发别人，把个人自主转化为现实影响。",
-  "shortSummary": "真正的领导力不由职位决定，而来自“内圣外王”：先掌控自己的选择与价值，再连接并激发他人，把真实自我转化为积极影响。",
-  "keyPoints": [
-    "领导力的根基不是外部地位、命令顺序或沟通套路，而是一个人内在核心的强度。",
-    "“内圣”是强大的内心修养和自主选择；“外王”是领导力和影响力，二者相辅相成。",
-    "真实自我不是对当下欲望的放任，而是在多种冲动、责任和价值之间识别更高层次的真正所求。",
-    "人在刺激与回应之间仍有选择如何回应的空间，这种自主余地构成内部掌控。",
-    "外部影响不是支配别人，而是用自己的内核连接他人的内核，激发其最好的一面并形成共同目标。",
-    "只追随外部评价会失去自我，只强调内在满足又可能与现实脱节；成熟需要内部计分卡与外部贡献的统一。",
-    "内心强大仍不够，还要相信他人、理解他人并让事情产生积极改变，才能完成从内圣到外王的转换。"
-  ],
   "root": {
-    "id": "inner-mastery-outer-impact",
-    "label": "内圣外王的勇气",
-    "detail": "以内部掌控形成真实而自主的内核，再把这种内核转化为连接他人、激发善意和推动积极改变的影响力。",
-    "evidenceRefs": [
-      "ev-core-thesis",
-      "ev-inner-outer-definition",
-      "ev-response-choice",
-      "ev-outer-impact"
-    ],
+    "id": "article-root",
+    "label": "《内部掌控，外部影响》1：内圣外王的勇气",
+    "detail": "真正的领导力源于内在的勇气与自我掌控，而非外部地位或权谋，个体在面对外界时拥有选择自由，通过激发他人潜能实现影响力，最终在理想与现实的张力中完成内圣外王的统一。",
     "children": [
       {
-        "id": "redefine-leadership",
-        "label": "重新定义领导力",
-        "detail": "领导力不以职位和权力为起点，而以内核大小和实际产生的积极影响来衡量。",
-        "evidenceRefs": [
-          "ev-core-thesis",
-          "ev-leadership-without-position"
-        ],
+        "id": "branch-1",
+        "label": "内圣：自我内心的掌控与自由",
+        "detail": "内圣与外王的哲学基础",
         "children": [
           {
-            "id": "inner-before-outer",
-            "label": "先领导自己",
-            "detail": "能在多大程度上掌控自己的内心，才可能在多大程度上从容处理外部事物。",
-            "evidenceRefs": [
-              "ev-core-thesis"
-            ],
+            "id": "branch-1-point-1",
+            "label": "概念溯源：内圣外王的中国智慧",
+            "detail": "‘内圣外王’源自《庄子》与儒家传统，指内在修养与外在领导力的统一，非要求成为圣人或帝王，而是强调内心强大与社会影响力的结合。",
             "children": []
           },
           {
-            "id": "position-is-not-leadership",
-            "label": "地位不等于领导力",
-            "detail": "领导力是能否在自己的影响范围内产生最大积极影响，而不是能指挥多少人。",
-            "evidenceRefs": [
-              "ev-leadership-without-position"
-            ],
+            "id": "branch-1-point-2",
+            "label": "核心命题：自我掌控是外部影响的根基",
+            "detail": "瓦德瓦引用达分奇名言：‘你永远都不会有比对自己更大或者更小的支配’，强调个体对自我的掌控是影响外部世界的前提。",
             "children": []
           },
           {
-            "id": "be-yourself",
-            "label": "领导力是真正做自己",
-            "detail": "跳出别人安排的脚本并施加主动性，才从被动角色转为能够影响局面的人。",
-            "evidenceRefs": [
-              "ev-leading-is-being"
-            ],
+            "id": "branch-1-point-3",
+            "label": "内圣的实质：在刺激与回应之间拥有选择自由",
+            "detail": "内圣即对内心世界的掌控，体现为在刺激与回应之间拥有选择自由，源自弗兰克与柯维的理论，是人面对外界时保持自主性的能力。",
             "children": []
           }
         ]
       },
       {
-        "id": "inner-mastery",
-        "label": "内圣：建立自主内核",
-        "detail": "内圣不是做圣人，也不是任性放纵，而是在相互竞争的欲望和期待中确认更高层次的价值并自主回应。",
-        "evidenceRefs": [
-          "ev-inner-outer-definition",
-          "ev-regret",
-          "ev-authentic-self",
-          "ev-response-choice"
-        ],
+        "id": "branch-2",
+        "label": "外王：在现实互动中实现影响力",
+        "detail": "真实案例中的领导力实践",
         "children": [
           {
-            "id": "inner-scorecard",
-            "label": "使用内部计分卡",
-            "detail": "不能只由世人的评价决定成功，要建立自己认可的衡量标准。",
-            "evidenceRefs": [
-              "ev-inner-scorecard"
-            ],
+            "id": "branch-2-point-1",
+            "label": "案例一：青年女化学家芭贝特的对话艺术",
+            "detail": "芭贝特面对老板戈登的严厉批评，使用‘可不咋地’等谈话技术，先认同再表达欣赏，最终引导戈登改变态度，体现其内在领导力。",
             "children": []
           },
           {
-            "id": "true-self-not-impulse",
-            "label": "真我不是即时冲动",
-            "detail": "人在同一时刻有多种欲望，真实自我是追问后确认的更高层次、本能之后的选择。",
-            "evidenceRefs": [
-              "ev-authentic-self"
-            ],
+            "id": "branch-2-point-2",
+            "label": "案例二：父亲在危急时刻的积极引导",
+            "detail": "父亲在女儿面临无麻醉手术时，主动传递两个‘好消息’，虽未使用技巧，却以勇气和信念激发了女儿的积极心理，展现广义领导力。",
             "children": []
           },
           {
-            "id": "space-to-choose",
-            "label": "守住回应的自由",
-            "detail": "刺激与回应之间存在自主余地，成长和自由来自选择如何回应。",
-            "evidenceRefs": [
-              "ev-response-choice"
-            ],
-            "children": []
-          },
-          {
-            "id": "live-your-own-life",
-            "label": "有勇气过属于自己的生活",
-            "detail": "临终遗憾揭示了长期按别人期待生活的代价，但做自己仍需面对现实关系与责任。",
-            "evidenceRefs": [
-              "ev-regret"
-            ],
+            "id": "branch-2-point-3",
+            "label": "领导力的本质：内在勇气与主动选择",
+            "detail": "两个案例共同揭示：领导力不依赖职位或权谋，而源于内在的勇气与对他人心理的敏锐洞察，是‘做自己’的体现。",
             "children": []
           }
         ]
       },
       {
-        "id": "outer-impact",
-        "label": "外王：把内核转化为影响",
-        "detail": "外王不是成为帝王或控制别人，而是连接他人的内核、激活其最好的一面并共同创造积极结果。",
-        "evidenceRefs": [
-          "ev-inner-outer-definition",
-          "ev-outer-impact"
-        ],
+        "id": "branch-3",
+        "label": "从内在觉醒到自我价值的建立",
+        "detail": "内圣与外王的统一路径",
         "children": [
           {
-            "id": "connect-inner-cores",
-            "label": "连接彼此的内核",
-            "detail": "从自己的稳定内核出发，理解他人的价值、愿望和优势。",
-            "evidenceRefs": [
-              "ev-outer-impact"
-            ],
+            "id": "branch-3-point-1",
+            "label": "工具引入：内部计分卡与外部评价的区分",
+            "detail": "瓦德瓦提出‘内二外分卡’概念，主张用‘内部计分卡’衡量自我，而非外部评价，如巴菲特以内心标准指导投资决策。",
             "children": []
           },
           {
-            "id": "activate-the-best",
-            "label": "激发他人最好的一面",
-            "detail": "影响不是强迫服从，而是相信别人具有更好的一面，并帮助它显现。",
-            "evidenceRefs": [
-              "ev-outer-impact",
-              "ev-closing-balance"
-            ],
+            "id": "branch-3-point-2",
+            "label": "自我发现：在多重欲望中识别真正价值",
+            "detail": "人脑是多元系统，面对欲望与目标时，需在‘本能反应’与‘深层价值’之间做出选择，如报告与社会贡献之间的权衡。",
             "children": []
           },
           {
-            "id": "shared-positive-goal",
-            "label": "形成共同积极目标",
-            "detail": "将自己和他人的长处发挥到极致，为成功创造条件，剩余才是概率问题。",
-            "evidenceRefs": [
-              "ev-outer-impact"
-            ],
+            "id": "branch-3-point-3",
+            "label": "真实的自我：超越本能的深层价值追寻",
+            "detail": "真正的自我不是放纵，而是经过本能之后的理性选择，是通过不断追问‘我真正想要什么’而形成的稳定内核。",
             "children": []
           }
         ]
       },
       {
-        "id": "stories-as-proof",
-        "label": "三个案例验证",
-        "detail": "文章用反向领导、重病中的鼓励和成功衡量方式，说明内圣如何具体转化为外王。",
-        "evidenceRefs": [
-          "ev-babette",
-          "ev-father-daughter",
-          "ev-inner-scorecard"
-        ],
+        "id": "branch-4",
+        "label": "外王的实现：激发他人与建立连接",
+        "detail": "人与人之间的连接与激发",
         "children": [
           {
-            "id": "babette-leads-boss",
-            "label": "芭贝特反向领导老板",
-            "detail": "面对“论文是垃圾”的羞辱，她先认同、再赞赏、换位、重申共同目标并请求合作，最终让老板投入修改论文。",
-            "evidenceRefs": [
-              "ev-babette"
-            ],
+            "id": "branch-4-point-1",
+            "label": "理论支撑：孟子对他人潜能的激发",
+            "detail": "孟子游说他人，是通过激发对方身上‘最好的一面’，体现‘相信每个人都有好面’的信念。",
             "children": []
           },
           {
-            "id": "father-reframes-fear",
-            "label": "父亲把恐惧转化为勇气",
-            "detail": "女儿必须在无麻醉下手术，父亲把坏消息重构为及时治疗和医生对她勇敢的信任，给她留下终身力量。",
-            "evidenceRefs": [
-              "ev-father-daughter"
-            ],
+            "id": "branch-4-point-2",
+            "label": "外王的实现：激发他人内在潜能",
+            "detail": "瓦德瓦认为，成功的关键在于激发他人最好的一面，而非单方面控制，是‘内核对接’的过程。",
             "children": []
           },
           {
-            "id": "buffett-scorecard",
-            "label": "巴菲特的内部计分卡",
-            "detail": "独立判断依赖内部标准，但文章同时指出，现代人的内外统一还要求把内在价值变成对他人的贡献。",
-            "evidenceRefs": [
-              "ev-inner-scorecard",
-              "ev-closing-balance"
-            ],
+            "id": "branch-4-point-3",
+            "label": "连接机制：信任与共同目标的建立",
+            "detail": "人与人之间的连接，是建立在相互信任与共同目标基础上的，这种连接是影响力产生的前提。",
             "children": []
           }
         ]
       },
       {
-        "id": "balance-inner-and-outer",
-        "label": "统一内圣与外王",
-        "detail": "只追随外界会失去自我，只顾内在又可能无法成功和连接他人；成熟是把自我选择与现实贡献统一起来。",
-        "evidenceRefs": [
-          "ev-regret",
-          "ev-inner-scorecard",
-          "ev-closing-balance"
-        ],
+        "id": "branch-5",
+        "label": "理想与现实的张力：内圣外王的现实挑战",
+        "detail": "现实困境与矛盾反思",
         "children": [
           {
-            "id": "avoid-external-capture",
-            "label": "不被外界期待俘获",
-            "detail": "避免把身份、成功和生活完全交给别人的评价定义。",
-            "evidenceRefs": [
-              "ev-regret",
-              "ev-inner-scorecard"
-            ],
+            "id": "branch-5-point-1",
+            "label": "现实困境：理想与现实的冲突",
+            "detail": "临终关怀护士布朗妮·维尔发现，人生最大遗憾是‘没有勇气活出真实的自己’，反映出‘内心想要’与‘外部要求’之间的深层矛盾。",
             "children": []
           },
           {
-            "id": "avoid-inner-isolation",
-            "label": "不把内心强大变成孤立",
-            "detail": "仅有理想和自信不足以改变局面，还必须与人连接并建立影响。",
-            "evidenceRefs": [
-              "ev-closing-balance"
-            ],
+            "id": "branch-5-point-2",
+            "label": "文化反思：为他人而活的代价",
+            "detail": "多数人陷入‘为别人而活’的模式，导致最终后悔，孔子‘古之学者为己，今之学者为人’的批判在此显现。",
             "children": []
           },
           {
-            "id": "trust-self-and-others",
-            "label": "同时相信自己与他人",
-            "detail": "既对自己的价值和选择有信心，也相信别人能够被理解、被激发并共同成长。",
-            "evidenceRefs": [
-              "ev-closing-balance"
-            ],
+            "id": "branch-5-point-3",
+            "label": "成功本质：社会评价的决定性作用",
+            "detail": "成功并非由内核或业务表现决定，而是由世人对表现的评价决定，这揭示了‘外王’的现实性与社会性。",
             "children": []
           }
         ]
       }
     ]
   },
-  "evidence": [
-    {
-      "id": "ev-core-thesis",
-      "blockIds": ["p1-b007", "p1-b008", "p1-b009"],
-      "pdfPage": 1,
-      "renderedYStart": 6000,
-      "renderedYEnd": 7600,
-      "excerpt": "你永远都不会有比对自己更大或者更小的支配权。"
-    },
-    {
-      "id": "ev-inner-outer-definition",
-      "blockIds": ["p1-b010"],
-      "pdfPage": 1,
-      "renderedYStart": 7200,
-      "renderedYEnd": 9000,
-      "excerpt": "“内圣”是强大的内心修养；“外王”是领导力和影响力。"
-    },
-    {
-      "id": "ev-babette",
-      "blockIds": ["p1-b012", "p1-b013", "p1-b014", "p1-b015", "p1-b016", "p1-b017", "p1-b018"],
-      "pdfPage": 1,
-      "renderedYStart": 9000,
-      "renderedYEnd": 12800,
-      "excerpt": "我想跟你学习怎么把论文写好。"
-    },
-    {
-      "id": "ev-leadership-without-position",
-      "blockIds": ["p1-b019"],
-      "pdfPage": 1,
-      "renderedYStart": 12100,
-      "renderedYEnd": 13700,
-      "excerpt": "领导力不是外部地位的高低，而是能不能在自己辐射范围内产生最大的积极影响。"
-    },
-    {
-      "id": "ev-father-daughter",
-      "blockIds": ["p1-b020", "p1-b021"],
-      "pdfPage": 1,
-      "renderedYStart": 13200,
-      "renderedYEnd": 15300,
-      "excerpt": "医生们一直在观察你，他们认为你是最勇敢的少年，所以手术甚至不需要麻醉！"
-    },
-    {
-      "id": "ev-leading-is-being",
-      "blockIds": ["p1-b022"],
-      "pdfPage": 1,
-      "renderedYStart": 14700,
-      "renderedYEnd": 15900,
-      "excerpt": "领导力是真正的“做自己”。"
-    },
-    {
-      "id": "ev-regret",
-      "blockIds": ["p1-b023", "p1-b024", "p1-b025"],
-      "pdfPage": 1,
-      "renderedYStart": 15800,
-      "renderedYEnd": 18400,
-      "excerpt": "我希望我有勇气过真正属于自己的生活，而不是别人期望的生活。"
-    },
-    {
-      "id": "ev-inner-scorecard",
-      "blockIds": ["p1-b026", "p1-b027", "p1-b028"],
-      "pdfPage": 1,
-      "renderedYStart": 18100,
-      "renderedYEnd": 20700,
-      "excerpt": "一定要用“内部计分卡”来衡量自己。"
-    },
-    {
-      "id": "ev-authentic-self",
-      "blockIds": ["p1-b029", "p1-b030", "p1-b031"],
-      "pdfPage": 1,
-      "renderedYStart": 20500,
-      "renderedYEnd": 22600,
-      "excerpt": "一个更真实的自我，必须是人的直接本能之后的某种东西。"
-    },
-    {
-      "id": "ev-response-choice",
-      "blockIds": ["p1-b032", "p1-b033"],
-      "pdfPage": 1,
-      "renderedYStart": 22200,
-      "renderedYEnd": 24400,
-      "excerpt": "在刺激和回应之间，你还有选择如何回应的自由与能力。"
-    },
-    {
-      "id": "ev-outer-impact",
-      "blockIds": ["p1-b034", "p1-b035", "p1-b036"],
-      "pdfPage": 1,
-      "renderedYStart": 24300,
-      "renderedYEnd": 26400,
-      "excerpt": "用自己的内核去对接别人的内核，去激发他们最好的一面，这就是“外王”。"
-    },
-    {
-      "id": "ev-closing-balance",
-      "blockIds": ["p1-b037", "p1-b038", "p1-b039"],
-      "pdfPage": 1,
-      "renderedYStart": 26600,
-      "renderedYEnd": 29700,
-      "excerpt": "自己内心强大是不够的，你还得去影响别人才能行。"
-    }
+  "model": "qwen3:4b-instruct",
+  "title": "《内部掌控，外部影响》1：内圣外王的勇气",
+  "summary": "本文以‘内圣外王’为核心，提出一个关于个人成长与社会影响力的全新框架：真正的领导力不来自职位或权力，而源于个体对自我的深刻掌控。文章从中国哲学传统出发，结合现代心理学与行为研究，指出‘内圣’是内在的自我掌控，表现为在刺激与回应之间拥有选择自由，这一能力源自弗兰克与柯维的理论，是人面对外界时保持自主性的基础。通过芭贝特与父亲两个真实案例，说明即使没有权力或技巧，个体也能通过内在勇气与真诚表达，实现对他人心理的积极影响，从而展现‘外王’——即对他人产生正面引导的能力。文章进一步指出，人与人之间的连接是外王实现的关键，必须建立在相信他人拥有潜能的基础上，如孟子游说所体现的。同时，现实困境显示，多数人因‘为他人而活’而陷入后悔，反映出内心真实渴望与外部社会要求之间的矛盾。最终，瓦德瓦提出‘内部计分卡’作为自我衡量标准，强调成功由社会评价决定，而非内在修养本身，从而将‘内圣’与‘外王’从哲学理想转化为可实践的路径。结论是：真正的影响力来自对自我的掌控与对他人潜能的激发，是‘做自己’在现实世界中的具体体现。",
+  "keyPoints": [
+    "内圣外王并非要求成为圣人或帝王，而是强调个体内心修养与社会影响力的统一。",
+    "真正的领导力不依赖职位或权谋，而源于内在的勇气与对他人心理的深刻理解。",
+    "在刺激与回应之间拥有选择自由，是内圣的核心体现，是人面对外界时保持自主性的能力。",
+    "瓦德瓦提出‘内部计分卡’概念，主张以内在标准衡量自我，而非外部评价，是实现内圣的重要工具。",
+    "人必须在多重欲望中识别真正价值，才能形成稳定的自我，从而在现实选择中保持自主。",
+    "外王的实现依赖于激发他人身上‘最好的一面’，是通过信任与共同目标建立的连接过程。",
+    "‘为别人而活’往往导致人生遗憾，反映出个体内心真实需求与外部社会要求之间的根本矛盾。",
+    "成功最终取决于社会对个体表现的评价，而非内在修养或能力本身，这为外王提供了现实基础。"
   ],
-  "source": {
-    "pdfObjectKey": "wwg-1019-18d85d2f/document.pdf",
-    "pdfPageCount": 1,
-    "pdfSizeBytes": 2793772,
-    "renderedWidth": 1069,
-    "renderedHeight": 39899,
-    "extractionMethod": "tesseract-chi-sim-plus-visual-correction",
-    "reviewedTileCount": 14,
-    "contentScope": "article-body-only",
-    "excludedContent": "reader-comments",
-    "textObjectKey": "derived/materials/wwg-1019-18d85d2f/ea6c319c07ec0ea86cb5ab9741d0c9db157fd8a061308ec81618e2993461593a/extraction-v1/article-body.txt.gz",
-    "blocksObjectKey": "derived/materials/wwg-1019-18d85d2f/ea6c319c07ec0ea86cb5ab9741d0c9db157fd8a061308ec81618e2993461593a/extraction-v1/article-blocks.jsonl.gz",
-    "manifestObjectKey": "derived/materials/wwg-1019-18d85d2f/ea6c319c07ec0ea86cb5ab9741d0c9db157fd8a061308ec81618e2993461593a/extraction-v1/manifest.json"
-  },
+  "sectionId": "wwg-season-5",
+  "collection": "session5",
+  "materialId": "wwg-1019-18d85d2f",
   "sourceHash": "sha256:ea6c319c07ec0ea86cb5ab9741d0c9db157fd8a061308ec81618e2993461593a",
-  "generatedAt": "2026-08-06T14:24:51+08:00"
+  "generatedAt": "2026-08-11T07:44:47.147834Z",
+  "shortSummary": "真正的领导力源于内在的勇气与自我掌控，而非外部地位或权谋，个体在面对外界时拥有选择自由，通过激发他人潜能实现影响力，最终在理想与现实的张力中完成内圣外王的统一。",
+  "promptVersion": "article-outline-v1",
+  "schemaVersion": 1,
+  "pipelineVersion": "summary-v1"
 }

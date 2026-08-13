@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 
 import { useCloudAuth } from "@/composables/useCloudAuth";
 import { useCloudSyncStatus } from "@/composables/useCloudSyncStatus";
+import { isCloudSyncEnabled } from "@/config/features";
 
 const router = useRouter();
 const {
@@ -28,16 +29,20 @@ const statusLabel = computed(() => {
     return "未配置";
   }
 
-  if (!isReady.value || isBusy.value || syncState.value === "syncing") {
-    return "同步中";
+  if (
+    !isReady.value ||
+    isBusy.value ||
+    (isCloudSyncEnabled && syncState.value === "syncing")
+  ) {
+    return isCloudSyncEnabled ? "同步中" : "登录中";
   }
 
-  if (authError.value || syncError.value) {
-    return "同步异常";
+  if (authError.value || (isCloudSyncEnabled && syncError.value)) {
+    return isCloudSyncEnabled ? "同步异常" : "登录异常";
   }
 
   if (!isSignedIn.value) {
-    return "登录同步";
+    return isCloudSyncEnabled ? "登录同步" : "账号登录";
   }
 
   return email.value || "已登录";
@@ -52,7 +57,7 @@ const buttonTitle = computed(() => {
     return authError.value;
   }
 
-  if (syncError.value) {
+  if (isCloudSyncEnabled && syncError.value) {
     return syncError.value;
   }
 
@@ -64,15 +69,26 @@ const buttonTitle = computed(() => {
 });
 
 const iconState = computed(() => {
-  if (!isConfigured || authError.value || syncError.value) {
+  if (
+    !isConfigured ||
+    authError.value ||
+    (isCloudSyncEnabled && syncError.value)
+  ) {
     return "error";
   }
 
-  if (!isReady.value || isBusy.value || syncState.value === "syncing") {
+  if (
+    !isReady.value ||
+    isBusy.value ||
+    (isCloudSyncEnabled && syncState.value === "syncing")
+  ) {
     return "busy";
   }
 
-  if (isSignedIn.value && syncState.value === "synced") {
+  if (
+    isSignedIn.value &&
+    (!isCloudSyncEnabled || syncState.value === "synced")
+  ) {
     return "synced";
   }
 

@@ -6,7 +6,6 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import CloudSyncButton from '@/components/sync/CloudSyncButton.vue'
 import { useCatalog } from '@/composables/useCatalog'
 import { useCloudAuth } from '@/composables/useCloudAuth'
-import { isCloudSyncEnabled } from '@/config/features'
 
 const cachedViews = ['LibraryView', 'FolderView', 'FavoritesView', 'HistoryView']
 const route = useRoute()
@@ -22,8 +21,7 @@ watch(
   isPasswordRecovery,
   async (isRecovering) => {
     if (
-      isCloudSyncEnabled
-      && isRecovering
+      isRecovering
       && (route.name !== 'login' || route.query.mode !== 'reset-password')
     ) {
       await router.replace({
@@ -56,7 +54,7 @@ watch(
       </span>
     </RouterLink>
 
-    <CloudSyncButton v-if="isCloudSyncEnabled" />
+    <CloudSyncButton />
   </header>
 
   <RouterView v-slot="{ Component, route }">

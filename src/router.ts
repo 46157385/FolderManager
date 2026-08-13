@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
-import { isCloudSyncEnabled, isKnowledgeBaseEnabled } from '@/config/features'
+import { isKnowledgeBaseEnabled } from '@/config/features'
 import LibraryView from '@/views/LibraryView.vue'
 
 const routes: RouteRecordRaw[] = [
@@ -31,13 +31,11 @@ const routes: RouteRecordRaw[] = [
     name: 'favorites',
     component: () => import('@/views/FavoritesView.vue'),
   },
-  ...(isCloudSyncEnabled
-    ? [{
-        path: '/login',
-        name: 'login',
-        component: () => import('@/views/LoginView.vue'),
-      } satisfies RouteRecordRaw]
-    : []),
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/LoginView.vue'),
+  },
   ...(isKnowledgeBaseEnabled
     ? [{
         path: '/knowledge/power-seven-rules',
