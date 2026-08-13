@@ -6,10 +6,14 @@ import {
 } from '@/services/folderManagerApi'
 import type { KnowledgeChatMessage } from '@/types/knowledge'
 
+const TYPEWRITER_TICK_MS = 40
+const TYPEWRITER_CATCH_UP_RATIO = 60
+
 export function useKnowledgeChat(knowledgeBaseId: string) {
   const messages = shallowRef<readonly KnowledgeChatMessage[]>([])
   const isSubmitting = shallowRef(false)
   const errorMessage = shallowRef('')
+  let activeTypewriter: Typewriter | null = null
 
   async function ask(question: string) {
     const normalizedQuestion = question.trim()
@@ -28,19 +32,18 @@ export function useKnowledgeChat(knowledgeBaseId: string) {
     ]
     isSubmitting.value = true
     errorMessage.value = ''
-    let streamedAnswer = ''
+    const typewriter = createTypewriter((revealedText) => {
+      updateMessage(assistantMessage.id, { content: revealedText })
+    })
+    activeTypewriter = typewriter
 
     try {
       const response = await askKnowledgeBaseStream(
         knowledgeBaseId,
         normalizedQuestion,
-        (delta) => {
-          streamedAnswer += delta
-          updateMessage(assistantMessage.id, {
-            content: streamedAnswer,
-          })
-        },
+        delta => typewriter.push(delta),
       )
+      await typewriter.finish()
       updateMessage(assistantMessage.id, {
         content: response.answer,
         sources: response.sources,
@@ -49,8 +52,12 @@ export function useKnowledgeChat(knowledgeBaseId: string) {
       return true
     }
     catch (error) {
-      if (streamedAnswer) {
-        updateMessage(assistantMessage.id, { streaming: false })
+      typewriter.cancel()
+      if (typewriter.receivedText) {
+        updateMessage(assistantMessage.id, {
+          content: typewriter.receivedText,
+          streaming: false,
+        })
       }
       else {
         messages.value = messages.value.filter(message => message.id !== assistantMessage.id)
@@ -59,11 +66,13 @@ export function useKnowledgeChat(knowledgeBaseId: string) {
       return false
     }
     finally {
+      activeTypewriter = null
       isSubmitting.value = false
     }
   }
 
   function clear() {
+    activeTypewriter?.cancel()
     messages.value = []
     errorMessage.value = ''
   }
@@ -85,6 +94,73 @@ export function useKnowledgeChat(knowledgeBaseId: string) {
     errorMessage: readonly(errorMessage),
     ask,
     clear,
+  }
+}
+
+interface Typewriter {
+  push: (delta: string) => void
+  finish: () => Promise<void>
+  cancel: () => void
+  readonly receivedText: string
+}
+
+// 网络按突发批次送达文本,这里缓冲后按字匀速放出;积压越多每拍放出越多,保证能追上流尾。
+function createTypewriter(onReveal: (text: string) => void): Typewriter {
+  let received = ''
+  let revealedLength = 0
+  let timer: ReturnType<typeof setInterval> | null = null
+  let finished = false
+  let resolveFinish: (() => void) | null = null
+
+  function step() {
+    if (revealedLength < received.length) {
+      const backlog = received.length - revealedLength
+      const charsPerTick = Math.max(1, Math.ceil(backlog / TYPEWRITER_CATCH_UP_RATIO))
+      revealedLength = Math.min(received.length, revealedLength + charsPerTick)
+      onReveal(received.slice(0, revealedLength))
+    }
+    if (finished && revealedLength >= received.length) {
+      stopTimer()
+      resolveFinish?.()
+    }
+  }
+
+  function startTimer() {
+    if (timer === null) {
+      timer = setInterval(step, TYPEWRITER_TICK_MS)
+    }
+  }
+
+  function stopTimer() {
+    if (timer !== null) {
+      clearInterval(timer)
+      timer = null
+    }
+  }
+
+  return {
+    push(delta: string) {
+      received += delta
+      startTimer()
+    },
+    finish() {
+      finished = true
+      if (revealedLength >= received.length) {
+        stopTimer()
+        return Promise.resolve()
+      }
+      startTimer()
+      return new Promise<void>((resolve) => {
+        resolveFinish = resolve
+      })
+    },
+    cancel() {
+      finished = true
+      stopTimer()
+    },
+    get receivedText() {
+      return received
+    },
   }
 }
 

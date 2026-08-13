@@ -17,13 +17,22 @@ Build Command: pnpm build
 Output Directory: dist
 ```
 
-5. 如果使用 Supabase 和远程资料资源，在 Vercel 的 Environment Variables 中加入 `.env.local` 里的变量：
+5. 先将 `folderManager_service` 部署为可通过 HTTPS 访问的 Java 服务，然后在 Vercel 的
+   Environment Variables 中配置：
 
 ```text
+VITE_API_BASE_URL=/api/v1
+BACKEND_API_BASE_URL=https://你的-Java-后端域名
 VITE_SUPABASE_URL=你的 Supabase Project URL
 VITE_SUPABASE_ANON_KEY=你的 Supabase anon public key
 VITE_MATERIALS_BASE_URL=https://你的资源域名/materials
 ```
+
+`BACKEND_API_BASE_URL` 可以填后端 origin（例如 `https://api.example.com`），也可以填完整
+API 前缀（例如 `https://api.example.com/api/v1`）。该变量不能指向 Vercel 前端自身，
+否则会形成循环代理。Vercel 会将浏览器的 `/api/v1/**` 请求同域代理到 Java 服务。
+
+修改 Vercel 环境变量后必须重新部署；环境变量不会追溯应用到旧的 Deployment。
 
 6. 部署成功后，把 Vercel 给你的正式地址加入 Supabase 控制台：
 
@@ -38,7 +47,8 @@ Authentication -> URL Configuration -> Redirect URLs
 https://folder-manager.vercel.app
 ```
 
-项目根目录的 `vercel.json` 已配置 SPA 回退，直接刷新阅读页、收藏页、历史页不会 404。
+项目根目录的 `vercel.json` 已配置 API 优先路由和 SPA 回退，直接刷新阅读页、收藏页、
+历史页不会 404，API 失败时也不会把 `index.html` 当成 JSON 解析。
 
 ## 资料资源托管
 

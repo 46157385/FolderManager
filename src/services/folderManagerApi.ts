@@ -8,6 +8,8 @@ import type {
 
 const DEFAULT_API_BASE_URL = '/api/v1'
 const API_PATH_PREFIX = '/api/v1'
+const JSON_CONTENT_TYPE_PATTERN = /\b(?:application|text)\/(?:[^;+]+\+)?json\b/i
+const NDJSON_CONTENT_TYPE_PATTERN = /\bapplication\/(?:x-)?ndjson\b/i
 const apiBaseUrl = normalizeBaseUrl(
   import.meta.env.VITE_API_BASE_URL?.trim() || DEFAULT_API_BASE_URL,
 )
@@ -184,6 +186,9 @@ export async function askKnowledgeBaseStream(
   if (!response.ok) {
     throw await createApiError(response)
   }
+  if (!hasExpectedContentType(response, NDJSON_CONTENT_TYPE_PATTERN)) {
+    throw createUnexpectedContentTypeError(response, 'NDJSON')
+  }
   if (!response.body) {
     throw new FolderManagerApiError(502, '浏览器未收到流式响应', 'empty_response')
   }
@@ -260,7 +265,25 @@ async function requestJson<T>(
     return undefined
   }
 
-  return await response.json() as T
+  if (!hasExpectedContentType(response, JSON_CONTENT_TYPE_PATTERN)) {
+    throw createUnexpectedContentTypeError(response, 'JSON')
+  }
+
+  const responseText = await response.text()
+  if (!responseText.trim()) {
+    return undefined
+  }
+
+  try {
+    return JSON.parse(responseText) as T
+  }
+  catch {
+    throw new FolderManagerApiError(
+      502,
+      '后端返回了无效的 JSON 数据',
+      'invalid_json_response',
+    )
+  }
 }
 
 async function requireAccessToken() {
@@ -286,7 +309,9 @@ async function createApiError(response: Response) {
   let problem: ProblemDetail | undefined
 
   try {
-    problem = await response.json() as ProblemDetail
+    if (hasExpectedContentType(response, JSON_CONTENT_TYPE_PATTERN)) {
+      problem = JSON.parse(await response.text()) as ProblemDetail
+    }
   }
   catch {
     problem = undefined
@@ -296,6 +321,24 @@ async function createApiError(response: Response) {
     response.status,
     problem?.detail || problem?.title || `请求失败（HTTP ${response.status}）`,
     problem?.errorCode,
+  )
+}
+
+function hasExpectedContentType(response: Response, pattern: RegExp) {
+  return pattern.test(response.headers.get('content-type') ?? '')
+}
+
+function createUnexpectedContentTypeError(
+  response: Response,
+  expectedType: 'JSON' | 'NDJSON',
+) {
+  const receivedType = response.headers.get('content-type')?.split(';', 1)[0]
+  const receivedDescription = receivedType || '未声明 Content-Type 的内容'
+
+  return new FolderManagerApiError(
+    502,
+    `后端接口未返回 ${expectedType}（收到 ${receivedDescription}），请检查正式环境的 API 地址或代理配置`,
+    'unexpected_response_content_type',
   )
 }
 
